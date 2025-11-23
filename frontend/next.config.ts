@@ -1,11 +1,7 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
+const nextConfig = {
   reactCompiler: true,
-  output: "export",
-  images: {
-    unoptimized: true,
-  },
 };
 
 export default nextConfig;
