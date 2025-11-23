@@ -3,10 +3,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
 
-
-
-
-
+// -----------------------------------------------------Register a new user-------------------------------------
 export const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -22,10 +19,10 @@ export const register = async (req, res) => {
     const token = jwt.sign({ id: user._id, email: user.email, name: user.name }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES });
 
     res.cookie(process.env.AUTH_COOKIE_NAME || "token", token, {
-      httpOnly: true,
-      sameSite: "none",
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    httpOnly: true,
+    sameSite: "none",
+    secure: true,
+    maxAge: 1000 * 60 * 60 * 24 * 7,
     });
 
     return res.status(201).json({ user: { id: user._id, name: user.name, email: user.email } });
@@ -34,6 +31,8 @@ export const register = async (req, res) => {
     return res.status(500).json({ error: "Register failed" });
   }
 };
+
+// -----------------------------------------------------Login an existing user-------------------------------------
 
 export const login = async (req, res) => {
   try {
@@ -50,12 +49,12 @@ export const login = async (req, res) => {
     const token = jwt.sign({ id: user._id, email: user.email, name: user.name }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES });
      console.log("Generated Token:", token);
      console.log("JWT SECRET USED:", process.env.JWT_SECRET);
-    res.cookie(process.env.AUTH_COOKIE_NAME || "token", token, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-    });
+     res.cookie(process.env.AUTH_COOKIE_NAME || "token", token, {
+     httpOnly: true,
+     sameSite: "none",
+     secure: true,
+     maxAge: 1000 * 60 * 60 * 24 * 7,
+          });
 
     return res.json({ user: { id: user._id, name: user.name, email: user.email } });
   } catch (err) {
@@ -63,6 +62,8 @@ export const login = async (req, res) => {
     return res.status(500).json({ error: "Login failed" });
   }
 };
+
+// -----------------------------------------------------Get current user-------------------------------------
 
 export const me = async (req, res) => {
   try {
@@ -81,7 +82,7 @@ export const me = async (req, res) => {
   }
 };
 
-
+// -----------------------------------------------------Logout user-------------------------------------
 export const logout = async (req, res) => {
   res.clearCookie(process.env.AUTH_COOKIE_NAME || "token", { path: "/" });
   return res.json({ message: "Logged out" });
