@@ -23,7 +23,7 @@ export const register = async (req, res) => {
 
     res.cookie(process.env.AUTH_COOKIE_NAME || "token", token, {
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: "none",
       secure: process.env.NODE_ENV === "production",
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
     });
