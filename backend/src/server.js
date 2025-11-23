@@ -15,13 +15,19 @@ connectDB();
 
 
 const app = express();
-app.use(cookieParser());
+
+const allowed = [
+  process.env.FRONTEND_URL,
+  "http://localhost:3000"
+];
+
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: allowed,
   credentials: true,
 }));
 
 app.use(express.json());
+app.use(cookieParser());
 
 
 app.use("/api/auth", authRoutes);
