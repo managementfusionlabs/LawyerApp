@@ -37,7 +37,7 @@ export default function CaseForm({ onSubmit }) {
       >
         {/* CLIENT INFO */}
         <div>
-          <h2 className="font-semibold text-lg mb-2">Client Information</h2>
+          <h2 className="font-semibold text-lg mb-2 font-serif text-[#0B1C39]">Client Information</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
               name="clientName"
@@ -68,7 +68,7 @@ export default function CaseForm({ onSubmit }) {
 
         {/* CASE DETAILS */}
         <div>
-          <h2 className="font-semibold text-lg mb-2">Case Details</h2>
+          <h2 className="font-semibold text-lg mb-2 font-serif text-[#0B1C39]">Case Details</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Select
               name="caseType"
@@ -110,7 +110,7 @@ export default function CaseForm({ onSubmit }) {
 
         {/* OPPOSING PARTY */}
         <div>
-          <h2 className="font-semibold text-lg mb-2">Opposing Party</h2>
+          <h2 className="font-semibold text-lg mb-2 font-serif text-[#0B1C39]">Opposing Party</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
               name="opponentName"
@@ -129,7 +129,7 @@ export default function CaseForm({ onSubmit }) {
 
         {/* DESCRIPTION */}
         <div>
-          <h2 className="font-semibold text-lg mb-2">Case Description</h2>
+          <h2 className="font-semibold text-lg mb-2 font-serif text-[#0B1C39]">Case Description</h2>
           <TextArea
             name="description"
             placeholder="Enter detailed case description..."
@@ -140,7 +140,7 @@ export default function CaseForm({ onSubmit }) {
 
         {/* EVIDENCE UPLOAD */}
         <div>
-          <h2 className="font-semibold text-lg mb-2">Evidence (Optional)</h2>
+          <h2 className="font-semibold text-lg mb-2 font-serif text-[#0B1C39]">Evidence (Optional)</h2>
           <input
             type="file"
             multiple

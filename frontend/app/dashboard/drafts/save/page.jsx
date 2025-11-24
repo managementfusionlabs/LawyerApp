@@ -46,13 +46,13 @@ export default function SaveDraftPage() {
 
   return (
     <div className="p-6">
-      <h1 className="text-xl font-bold">Save Draft</h1>
+      <h1 className="text-xl font-bold font-serif text-[#0B1C39]">Save Draft</h1>
       <p className="text-gray-600 mt-3">Do you want to save this draft?</p>
 
       <button
         onClick={saveDraft}
         disabled={loading}
-        className="mt-6 w-full bg-black text-white py-3 rounded-lg font-semibold"
+        className="mt-6 w-full bg-[#0B1C39] text-white py-3 rounded-xl font-semibold shadow-sm border-2 border-[#D4A017] transition-all duration-200 transform-gpu hover:scale-105 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39] hover:shadow-lg"
       >
         {loading ? <Loader text="Saving..." /> : "Save Draft"}
       </button>

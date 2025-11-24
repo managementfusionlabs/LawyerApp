@@ -7,9 +7,9 @@ export default function Checkbox({ label, checked, onChange, name }) {
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
-        className="w-4 h-4 rounded border"
+        className="w-4 h-4 rounded border border-[#0B1C39] text-[#0B1C39]"
       />
-      <span className="text-gray-700">{label}</span>
+      <span className="text-[#0B1C39]">{label}</span>
     </label>
   );
 }

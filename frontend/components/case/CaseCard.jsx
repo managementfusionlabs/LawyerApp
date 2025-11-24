@@ -3,9 +3,9 @@ import Card from "@/components/ui/Card";
 
 export default function CaseCard({ caseData }) {
   return (
-    <Card className="p-5 border hover:shadow-md transition">
+    <Card className="p-5 border-l-4 border-[#D4A017] hover:shadow-2xl transition">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold">
+        <h3 className="text-lg font-semibold text-[#0B1C39]">
           {caseData.clientName}
         </h3>
 
@@ -39,14 +39,14 @@ export default function CaseCard({ caseData }) {
       <div className="mt-4 flex gap-3">
         <Link
           href={`/dashboard/cases/${caseData._id}`}
-          className="bg-black text-white px-3 py-1 rounded text-sm"
+          className="bg-[#0B1C39] text-white px-3 py-1 rounded text-sm border-2 border-[#D4A017] transition-all duration-200 transform-gpu hover:scale-105 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39]"
         >
           View
         </Link>
 
         <Link
           href={`/dashboard/cases/edit/${caseData._id}`}
-          className="bg-gray-800 text-white px-3 py-1 rounded text-sm"
+          className="bg-white text-[#0B1C39] px-3 py-1 rounded text-sm border border-[#D4A017] transition-all duration-200 transform-gpu hover:scale-105 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39]"
         >
           Edit
         </Link>

@@ -20,7 +20,7 @@ export default function DashboardLayout({ children }) {
   if (loading) return <div className="p-6">Checking authentication...</div>;
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-[#F9FAFB] bg-[radial-gradient(ellipse_at_center,rgba(10,26,47,0.04),rgba(10,26,47,0))]">
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <Navbar />

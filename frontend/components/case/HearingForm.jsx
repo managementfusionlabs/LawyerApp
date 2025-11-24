@@ -38,7 +38,7 @@ export default function HearingForm({ caseId }) {
 
   return (
     <Card className="mt-6">
-      <h2 className="text-xl font-semibold mb-3">Summon & Hearing Date</h2>
+      <h2 className="text-xl font-semibold mb-3 font-serif text-[#0B1C39]">Summon & Hearing Date</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
@@ -56,11 +56,7 @@ export default function HearingForm({ caseId }) {
         />
       </div>
 
-      <Button
-        className="mt-4"
-        onClick={handleSubmit}
-        disabled={loading}
-      >
+      <Button className="mt-4" onClick={handleSubmit} disabled={loading}>
         {loading ? "Saving..." : "Save Hearing Date"}
       </Button>
     </Card>

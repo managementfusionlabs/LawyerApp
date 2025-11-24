@@ -42,8 +42,8 @@ export default function DraftListPage() {
   return (
     <div className="p-4 md:p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-xl md:text-2xl font-bold">Drafts</h1>
-        <Link href="/dashboard/drafts/create" className="bg-black text-white px-4 py-2 rounded-md text-sm">
+        <h1 className="text-xl md:text-2xl font-bold font-serif text-[#0B1C39]">Drafts</h1>
+        <Link href="/dashboard/drafts/create" className="bg-[#0B1C39] text-white px-4 py-2 rounded-md text-sm border-2 border-[#D4A017] transition-all duration-200 transform-gpu hover:scale-105 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39]">
           + New Draft
         </Link>
       </div>
@@ -54,7 +54,7 @@ export default function DraftListPage() {
           placeholder="Search by type or text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full p-3 border rounded-md bg-gray-50 focus:ring-2 focus:ring-black outline-none"
+          className="w-full p-3 border rounded-md bg-gray-50 focus:ring-2 focus:ring-[#D4A017] focus:border-[#0B1C39] outline-none"
         />
       </div>
 
@@ -67,14 +67,14 @@ export default function DraftListPage() {
             <Link
               key={d._id}
               href={`/dashboard/drafts/${d._id}`}
-              className="block bg-white rounded-xl shadow p-4 border"
+              className="block bg-white rounded-xl shadow p-4 border-l-4 border-[#D4A017]"
             >
               <div className="flex justify-between items-start mb-2">
                 <div>
                   <p className="font-semibold">{d.draftType || "Draft"}</p>
                   <p className="text-xs text-gray-500 mt-1">{new Date(d.createdAt).toLocaleString()}</p>
                 </div>
-                <div className="text-right text-xs text-gray-600"> Case: {d.caseId?.caseNumber.toUpperCase() || "—"}</div>
+                <div className="text-right text-xs text-[#0B1C39]"> Case: {d.caseId?.caseNumber.toUpperCase() || "—"}</div>
 
               </div>
 
@@ -87,8 +87,8 @@ export default function DraftListPage() {
       {/* Desktop table */}
       <div className="hidden md:block bg-white rounded-xl shadow border overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-gray-100 text-left text-sm">
-            <tr>
+          <thead className="bg-[#F4F6F8] text-left text-sm">
+            <tr className="text-[#0B1C39]">
               <th className="p-3">Type</th>
               <th className="p-3">Case</th>
               <th className="p-3">Excerpt</th>
@@ -106,15 +106,15 @@ export default function DraftListPage() {
 
             {filtered.map((d) => (
               <tr key={d._id} className="border-t hover:bg-gray-50">
-                <td className="p-3 font-medium">{d.draftType || "Draft"}</td>
+                <td className="p-3 font-medium text-[#0B1C39]">{d.draftType || "Draft"}</td>
                 <td className="p-3">{d.caseId?.caseNumber.toUpperCase() || "—"}</td>
 
                 <td className="p-3 text-sm line-clamp-2">{d.content ? d.content.slice(0, 120) + (d.content.length>120?"...":"") : "—"}</td>
                 <td className="p-3 text-sm text-gray-600">{new Date(d.createdAt).toLocaleString()}</td>
                 <td className="p-3">
                   <div className="flex gap-2">
-                    <Link href={`/dashboard/drafts/${d._id}`} className="text-black font-medium">View</Link>
-                    <a href={`${process.env.NEXT_PUBLIC_API}/drafts/${d._id}/pdf`} className="text-gray-700">PDF</a>
+                    <Link href={`/dashboard/drafts/${d._id}`} className="text-[#0B1C39] font-medium transition-all duration-200 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39] px-2 py-1">View</Link>
+                    <a href={`${process.env.NEXT_PUBLIC_API}/drafts/${d._id}/pdf`} className="text-[#0B1C39] transition-all duration-200 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39] px-2 py-1">PDF</a>
                   </div>
                 </td>
               </tr>

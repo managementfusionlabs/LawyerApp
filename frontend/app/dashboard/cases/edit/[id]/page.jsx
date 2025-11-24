@@ -76,7 +76,7 @@ export default function EditCasePage() {
 
   return (
     <div className="p-4 md:p-6">
-      <h1 className="text-2xl font-bold mb-6">Edit Case</h1>
+      <h1 className="text-2xl font-bold font-serif mb-6 text-[#0B1C39]">Edit Case</h1>
 
       <form onSubmit={handleSave} className="space-y-6">
 
@@ -154,7 +154,7 @@ export default function EditCasePage() {
             name="filingDate"
             value={caseData.filingDate || ""}
             onChange={handleChange}
-            className="w-full p-3 border rounded-md bg-gray-50 mt-1 focus:ring-2 focus:ring-black outline-none"
+            className="w-full p-3 border rounded-md bg-gray-50 mt-1 focus:ring-2 focus:ring-[#D4A017] focus:border-[#0B1C39] outline-none"
           />
         </div>
 
@@ -184,7 +184,7 @@ export default function EditCasePage() {
         />
 
         <button
-          className="w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-900 transition"
+          className="w-full bg-[#0B1C39] text-white py-3 rounded-xl font-semibold shadow-sm transition-all duration-200 transform-gpu hover:scale-105 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39] hover:shadow-lg border-2 border-[#D4A017]"
           disabled={saveLoading}
         >
           {saveLoading ? <Loader text="Saving..." /> : "Save Changes"}

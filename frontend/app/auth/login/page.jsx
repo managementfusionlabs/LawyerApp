@@ -51,10 +51,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="bg-white w-full max-w-md p-8 rounded-xl shadow-lg border">
-        
-        <h1 className="text-3xl font-bold text-center">Welcome Back</h1>
+    <div className="min-h-screen flex items-center justify-center bg-[#F9FAFB] bg-[radial-gradient(ellipse_at_center,rgba(11,28,57,0.06),rgba(11,28,57,0))] py-20 md:py-28 px-6 md:px-12">
+      <div className="relative bg-gradient-to-br from-white/95 to-[#F3F7FA] backdrop-blur-sm rounded-2xl p-8 md:p-10 w-full max-w-md shadow-xl ring-1 ring-gray-100 transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] border-l-4 border-[#D4AF37]">
+
+        <h1 className="text-3xl md:text-4xl font-serif font-extrabold text-[#0B1C39] tracking-wide text-center">Welcome Back</h1>
         <p className="text-gray-600 text-center mb-6">Login to continue</p>
 
         <form onSubmit={submit} className="space-y-5">
@@ -64,6 +64,7 @@ export default function LoginPage() {
             value={form.email}
             onChange={handleChange}
             required
+            className="w-full"
           />
 
           <PasswordInput
@@ -72,6 +73,7 @@ export default function LoginPage() {
             value={form.password}
             onChange={handleChange}
             required
+            className="w-full"
           />
 
           <div className="flex items-center justify-between">
@@ -81,13 +83,13 @@ export default function LoginPage() {
               checked={form.remember}
               onChange={handleChange}
             />
-            <a href="/auth/forgot" className="text-sm font-medium text-black">
+            <a href="/auth/forgot" className="text-sm font-medium text-[#0A1A2F] hover:text-[#D4A017] transition duration-200">
               Forgot password?
             </a>
           </div>
 
           {error && (
-            <p className="text-red-600 bg-red-100 p-2 rounded text-sm">
+            <p className="text-red-600 bg-red-50 p-2 rounded-xl text-sm">
               {error}
             </p>
           )}
@@ -95,7 +97,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-900 transition"
+            className="w-full bg-[#0B1C39] text-white font-semibold px-6 py-3 rounded-xl shadow-sm transition-all duration-200 transform-gpu hover:scale-105 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39] hover:shadow-lg border-2 border-[#D4A017]"
           >
             {loading ? <Loader text="Logging in..." /> : "Login"}
           </button>
@@ -103,7 +105,7 @@ export default function LoginPage() {
 
         <p className="text-center mt-6 text-sm">
           Don’t have an account?{" "}
-          <a className="text-black font-semibold" href="/auth/register">
+          <a className="text-[#0A1A2F] font-semibold hover:text-[#D4A017] transition duration-200" href="/auth/register">
             Register
           </a>
         </p>

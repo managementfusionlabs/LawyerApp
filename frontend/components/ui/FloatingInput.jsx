@@ -25,7 +25,7 @@ export default function FloatingInput({
         required={required}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
-        className="peer placeholder-transparent w-full border rounded-md px-3 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-black"
+        className="peer placeholder-transparent w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#0B1C39] focus:shadow-sm focus:shadow-[rgba(212,175,55,0.12)] outline-none transition bg-white"
         {...props}
       />
       <label
