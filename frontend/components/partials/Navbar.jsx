@@ -23,8 +23,10 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="w-full bg-white/40 backdrop-blur-sm sticky top-0 z-40 border-b border-white/10 px-4 py-3 flex justify-between items-center md:px-6">
-        <h1 className="text-lg md:text-xl font-semibold font-serif text-[#0B1C39]">Dashboard</h1>
+      <header className="w-full bg-white/40 backdrop-blur-sm sticky top-0 z-40 border-b border-white/10 px-4 py-3 relative flex items-center md:px-6">
+        <h1 className="absolute left-1/2 transform -translate-x-1/2 pointer-events-none text-lg md:text-xl font-semibold font-serif text-[#0B1C39]">Dashboard</h1>
+
+        <div className="ml-0 flex-1" />
 
         <button
           onClick={() => setConfirmOpen(true)}
