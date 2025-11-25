@@ -10,6 +10,8 @@ export default function CaseViewPage() {
 
   const [caseData, setCaseData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [solving, setSolving] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   useEffect(() => {
     const fetchCase = async () => {
@@ -162,9 +164,90 @@ export default function CaseViewPage() {
       {/* Actions */}
       <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
 
-        <button className="w-full bg-[#0B1C39] text-white py-3 rounded-xl font-semibold shadow-sm transition-all duration-200 transform-gpu hover:scale-105 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39] hover:shadow-lg border-2 border-[#D4A017]">
-          Mark as Solved
+        <button
+          onClick={() => setConfirmOpen(true)}
+          disabled={solving}
+          className="w-full bg-[#0B1C39] text-white py-3 rounded-xl font-semibold shadow-sm transition-all duration-200 transform-gpu hover:scale-105 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39] hover:shadow-lg border-2 border-[#D4A017] disabled:opacity-70 disabled:cursor-wait"
+        >
+          {solving ? (
+            <span className="inline-flex items-center gap-2">
+              <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+              </svg>
+              Marking...
+            </span>
+          ) : (
+            "Mark as Solved"
+          )}
         </button>
+
+      {/* Confirmation modal */}
+      {confirmOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/50" onClick={() => { if (!solving) setConfirmOpen(false); }} />
+
+          <div className="relative bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md text-center">
+            <h3 className="text-lg font-semibold text-[#0B1C39]">Are you sure?</h3>
+            <p className="mt-2 text-sm text-gray-600">Are you sure you want to mark this case as solved? This will move it to the Solved list.</p>
+
+            {/* stylish divider */}
+            <div className="my-4">
+              <div className="h-0.5 bg-gradient-to-r from-[#D4A017] via-transparent to-[#0B1C39] rounded" />
+            </div>
+
+            <div className="flex items-center justify-center gap-3 mt-2">
+              <button
+                onClick={async () => {
+                  setSolving(true);
+                  try {
+                    const res = await fetch(`${process.env.NEXT_PUBLIC_API}/cases/${caseData._id}/solve`, {
+                      method: "PUT",
+                      credentials: "include",
+                    });
+                    const data = await res.json();
+                    if (!res.ok) {
+                      alert(data.error || "Failed to mark case solved");
+                      setSolving(false);
+                      return;
+                    }
+
+                    setCaseData((c) => ({ ...c, status: "solved" }));
+                    setConfirmOpen(false);
+                    // navigate to cases list with solved filter
+                    router.push("/dashboard/cases?filter=solved");
+                  } catch (err) {
+                    console.error(err);
+                    alert("Server error");
+                    setSolving(false);
+                  }
+                }}
+                disabled={solving}
+                className="px-4 py-2 rounded-xl bg-[#0B1C39] text-white font-semibold border-2 border-[#D4A017] transition-all duration-200 hover:scale-105 disabled:opacity-70"
+              >
+                {solving ? (
+                  <span className="inline-flex items-center gap-2">
+                    <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                    </svg>
+                    Marking...
+                  </span>
+                ) : (
+                  "Yes"
+                )}
+              </button>
+
+              <button
+                onClick={() => { if (!solving) setConfirmOpen(false); }}
+                className="px-4 py-2 rounded-xl bg-white text-[#0B1C39] font-semibold border border-[#D4A017] transition-all duration-200 hover:scale-105"
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
         <button
           onClick={() =>

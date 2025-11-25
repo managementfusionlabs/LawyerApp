@@ -57,7 +57,7 @@ export default function AIDraftGenerator() {
   };
 
   return (
-    <div className="p-4 md:p-6">
+    <div className="p-4 md:p-6 overflow-x-hidden">
       <h1 className="text-2xl font-bold font-serif mb-6 text-[#0B1C39]">Generate AI Draft</h1>
 
       <form onSubmit={generateDraft} className="space-y-6">

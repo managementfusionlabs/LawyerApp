@@ -40,7 +40,7 @@ export default function DraftListPage() {
   }
 
   return (
-    <div className="p-4 md:p-6">
+    <div className="p-4 md:p-6 overflow-x-hidden">
       <div className="sticky top-14 md:top-0 z-30 bg-[#F9FAFB] pt-2 pb-4 -mx-4 md:-mx-6 px-4 md:px-6" style={{ WebkitBackdropFilter: "blur(4px)" }}>
         <div className="flex justify-between items-center mb-3">
           <h1 className="text-xl md:text-2xl font-bold font-serif text-[#0B1C39]">Drafts</h1>

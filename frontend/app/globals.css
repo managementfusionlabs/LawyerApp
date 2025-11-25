@@ -7,3 +7,13 @@ html { -webkit-text-size-adjust: 100%; }
 
 /* Prevent iOS zoom when focusing form controls by ensuring minimum font-size */
 input, select, textarea, button { font-size: 16px; }
+
+/* Custom blink (on/off) for Active badge: clear on/off visibility */
+@keyframes blink-onoff {
+	0% { opacity: 1; }
+	50% { opacity: 0; }
+	100% { opacity: 1; }
+}
+.blink-onoff {
+	animation: blink-onoff 1s steps(2, start) infinite;
+}
