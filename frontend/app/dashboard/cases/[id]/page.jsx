@@ -1,97 +1,190 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { fetchMe } from "@/lib/auth";
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import Loader from "@/components/ui/Loader";
 
-export default function CasePage({ params }) {
-	const id = params?.id ?? "";
-	const router = useRouter();
-	const [loading, setLoading] = useState(true);
-	const [caseData, setCaseData] = useState(null);
-	const [error, setError] = useState(null);
+export default function CaseViewPage() {
+  const { id } = useParams();
+  const router = useRouter();
 
-	useEffect(() => {
-		let mounted = true;
+  const [caseData, setCaseData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-		(async () => {
-			try {
-				setLoading(true);
+  useEffect(() => {
+    const fetchCase = async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API}/cases/${id}`, {
+          credentials: "include",
+        });
 
-				// get current user (lawyer) to include id in the request
-				const user = await fetchMe();
-				if (!user) {
-					// not authenticated - redirect to login
-					router.push("/auth/login");
-					return;
-				}
+        const data = await res.json();
 
-				const base = process.env.NEXT_PUBLIC_API ?? "";
-				const baseUrl = base ? base.replace(/\/$/, "") : "";
-				const url = baseUrl
-					? `${baseUrl}/cases/${id}?lawyer=${encodeURIComponent(user._id)}`
-					: `/cases/${id}?lawyer=${encodeURIComponent(user._id)}`;
+        if (!res.ok) {
+          console.log(data.error);
+          setLoading(false);
+          return;
+        }
 
-				const res = await fetch(url, { credentials: "include" });
-				if (!res.ok) {
-					setError(`Failed to load case (${res.status})`);
-					setLoading(false);
-					return;
-				}
+        setCaseData(data.case);
+        setLoading(false);
+      } catch (err) {
+        console.log(err);
+        setLoading(false);
+      }
+    };
 
-				const json = await res.json();
-				if (!mounted) return;
-				setCaseData(json.case || json.data || json);
-			} catch (err) {
-				console.error("Error loading case detail:", err);
-				setError("Network error while loading case");
-			} finally {
-				if (mounted) setLoading(false);
-			}
-		})();
+    fetchCase();
+  }, [id]);
 
-		return () => {
-			mounted = false;
-		};
-	}, [id, router]);
+  if (loading) {
+    return (
+      <div className="flex justify-center mt-10">
+        <Loader text="Loading case..." />
+      </div>
+    );
+  }
 
-	if (loading) return <div className="p-6">Loading case...</div>;
-	if (error)
-		return (
-			<div className="p-6">
-				<div className="bg-white rounded-2xl p-6 shadow border-l-4 border-red-500">
-					<h1 className="text-xl font-bold text-[#0B1C39]">Error</h1>
-					<p className="text-sm text-red-600">{error}</p>
-				</div>
-			</div>
-		);
+  if (!caseData) {
+    return (
+      <div className="p-6 text-center text-gray-600">
+        Case not found or unauthorized.
+      </div>
+    );
+  }
 
-	if (!caseData)
-		return (
-			<div className="p-6">
-				<div className="bg-white rounded-2xl p-6 shadow border-l-4 border-[#D4A017]">
-					<h1 className="text-2xl font-bold font-serif text-[#0B1C39] mb-2">Case Not Found</h1>
-					<p className="text-sm text-gray-600">No case found for id: <span className="font-medium">{id}</span></p>
-				</div>
-			</div>
-		);
+  return (
+    <div className="p-4 md:p-6">
 
-	return (
-		<div className="p-6">
-			<div className="bg-white rounded-2xl p-6 shadow border-l-4 border-[#D4A017]">
-				<h1 className="text-2xl font-bold font-serif text-[#0B1C39] mb-2">Case Details</h1>
+      {/* Heading */}
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-xl md:text-2xl font-bold">Case Details</h1>
 
-				<p className="text-sm text-gray-600 mb-4">Case ID: <span className="font-medium">{id}</span></p>
+        <button
+          onClick={() => router.push(`/dashboard/cases/edit/${caseData._id}`)}
+          className="bg-black text-white px-4 py-2 rounded-md text-sm"
+        >
+          Edit
+        </button>
+      </div>
 
-				<div className="space-y-2 text-gray-700">
-					<div><strong>Client:</strong> {caseData.clientName ?? caseData.client}</div>
-					<div><strong>Case Number:</strong> {caseData.caseNumber ?? caseData.number}</div>
-					<div><strong>Court:</strong> {caseData.courtName ?? caseData.court}</div>
-					<div><strong>Type:</strong> {caseData.caseType ?? caseData.type}</div>
-					<div><strong>Status:</strong> {caseData.status}</div>
-					<div><strong>Filed On:</strong> {caseData.filingDate}</div>
-				</div>
-			</div>
-		</div>
-	);
+      <div className="bg-white shadow rounded-xl p-6 border space-y-4">
+
+        {/* Client info */}
+        <h2 className="text-lg font-semibold mb-2">Client Details</h2>
+
+        <p><span className="font-bold">Client:</span> {caseData.clientName}</p>
+        <p><span className="font-bold">Phone:</span> {caseData.phone || "N/A"}</p>
+        <p><span className="font-bold">Email:</span> {caseData.email || "N/A"}</p>
+        <p><span className="font-bold">Address:</span> {caseData.address || "N/A"}</p>
+
+        <hr />
+
+        {/* Case info */}
+        <h2 className="text-lg font-semibold mb-2">Case Information</h2>
+
+        <p><span className="font-bold">Case Number:</span> {caseData.caseNumber || "N/A"}</p>
+        <p><span className="font-bold">Case Type:</span> {caseData.caseType || "N/A"}</p>
+
+        <p>
+          <span className="font-bold">Status:</span>{" "}
+          <span
+            className={`px-2 py-1 rounded text-xs ${
+              caseData.status === "active"
+                ? "bg-green-100 text-green-700"
+                : "bg-gray-200 text-gray-700"
+            }`}
+          >
+            {caseData.status.toUpperCase()}
+          </span>
+        </p>
+
+        <p><span className="font-bold">Court Name:</span> {caseData.courtName || "N/A"}</p>
+
+        <p>
+          <span className="font-bold">Filing Date:</span>{" "}
+          {caseData.filingDate
+            ? new Date(caseData.filingDate).toLocaleDateString()
+            : "N/A"}
+        </p>
+
+        <hr />
+
+        {/* Opponent info */}
+        <h2 className="text-lg font-semibold mb-2">Opponent Details</h2>
+
+        <p><span className="font-bold">Opponent Name:</span> {caseData.opponentName || "N/A"}</p>
+        <p><span className="font-bold">Opponent Address:</span> {caseData.opponentAddress || "N/A"}</p>
+
+        <hr />
+
+        {/* Description */}
+        <p className="text-gray-700">
+          <span className="font-bold">Description:</span><br />
+          {caseData.description || "N/A"}
+        </p>
+
+        <p className="text-xs text-gray-500">
+          Created: {new Date(caseData.createdAt).toLocaleString()}
+        </p>
+      </div>
+
+      {/* Hearings */}
+      <div className="mt-8">
+        <h2 className="text-lg font-bold mb-3">Hearings</h2>
+
+        {!caseData.hearings || caseData.hearings.length === 0 ? (
+          <p className="text-gray-600 text-sm">No hearings added yet.</p>
+        ) : (
+          <div className="space-y-3">
+            {caseData.hearings.map((h) => (
+              <div
+                key={h._id}
+                className="bg-white border shadow p-4 rounded-lg space-y-1"
+              >
+                <p className="font-medium">
+                  Date: {new Date(h.date).toLocaleDateString()}
+                </p>
+
+                {h.court && (
+                  <p className="text-sm text-gray-700">Court: {h.court}</p>
+                )}
+
+                {h.notes && (
+                  <p className="text-sm text-gray-600">Notes: {h.notes}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Actions */}
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+
+        <button className="w-full bg-gray-800 text-white py-3 rounded-lg font-semibold">
+          Mark as Solved
+        </button>
+
+        <button
+          onClick={() =>
+            router.push(`/dashboard/hearings/add?case=${caseData._id}`)
+          }
+          className="w-full bg-black text-white py-3 rounded-lg font-semibold"
+        >
+          Add Hearing Date
+        </button>
+
+        <button
+          onClick={() =>
+            router.push(`/dashboard/drafts/create?case=${caseData._id}`)
+          }
+          className="w-full bg-gray-900 text-white py-3 rounded-lg font-semibold"
+        >
+          Generate AI Draft
+        </button>
+
+      </div>
+    </div>
+  );
 }
