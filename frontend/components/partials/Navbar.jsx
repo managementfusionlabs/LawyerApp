@@ -14,12 +14,40 @@ export default function Navbar() {
         credentials: "include",
       });
     } catch (err) {
-      // ignore errors, still navigate away
-      console.error(err);
+      // ignore server errors, still attempt client-side cleanup
+      console.error("Logout request failed:", err);
     }
-    // go to landing page
+
+    // Clear client-side state: localStorage, sessionStorage and any non-HttpOnly cookies
+    try {
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.clear();
+        } catch (e) {}
+        try {
+          sessionStorage.clear();
+        } catch (e) {}
+
+        // Attempt to remove cookies that are not HttpOnly
+        document.cookie.split(";").forEach((c) => {
+          const eqPos = c.indexOf("=");
+          const name = eqPos > -1 ? c.substr(0, eqPos).trim() : c.trim();
+          if (!name) return;
+          document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+          document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=${window.location.hostname}`;
+        });
+      }
+    } catch (cleanupErr) {
+      console.error("Error clearing client storage on logout:", cleanupErr);
+    }
+
+    // close modal and navigate to landing page
+    try {
+      setConfirmOpen(false);
+    } catch (e) {}
     router.push("/");
   };
+
 
   return (
     <>
