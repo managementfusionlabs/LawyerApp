@@ -154,7 +154,7 @@ export default function EditCasePage() {
             name="filingDate"
             value={caseData.filingDate || ""}
             onChange={handleChange}
-            className="w-full p-3 border rounded-md bg-gray-50 mt-1 focus:ring-2 focus:ring-[#D4A017] focus:border-[#0B1C39] outline-none"
+            className="w-full p-3 border border-gray-200 rounded-xl bg-white text-[#0B1C39] mt-1 focus:ring-2 focus:ring-[#D4A017] focus:border-[#0B1C39] outline-none"
           />
         </div>
 

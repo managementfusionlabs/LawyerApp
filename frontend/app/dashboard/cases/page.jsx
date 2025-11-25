@@ -41,7 +41,7 @@ export default function CasesPage() {
             <Link
               key={c._id}
               href={`/dashboard/cases/${c._id}`}
-              className="block bg-white rounded-xl shadow-lg border-l-4 border-[#D4A017] p-4 hover:shadow-2xl transform hover:-translate-y-1 transition"
+              className="block bg-white rounded-xl shadow-lg border-l-4 border-[#D4A017] p-4 md:hover:shadow-2xl transform md:hover:-translate-y-1 transition"
             >
               <div className="flex justify-between items-center">
                 <p>

@@ -58,11 +58,11 @@ export default function CaseViewPage() {
 
       {/* Heading */}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-xl md:text-2xl font-bold">Case Details</h1>
+        <h1 className="text-xl md:text-2xl font-bold text-[#0B1C39]">Case Details</h1>
 
         <button
           onClick={() => router.push(`/dashboard/cases/edit/${caseData._id}`)}
-          className="bg-black text-white px-4 py-2 rounded-md text-sm"
+          className="bg-[#0B1C39] text-white px-4 py-2 rounded-xl text-sm border-2 border-[#D4A017] transition-all duration-200 transform-gpu hover:scale-105 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39] hover:shadow-lg"
         >
           Edit
         </button>
@@ -162,7 +162,7 @@ export default function CaseViewPage() {
       {/* Actions */}
       <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
 
-        <button className="w-full bg-gray-800 text-white py-3 rounded-lg font-semibold">
+        <button className="w-full bg-[#0B1C39] text-white py-3 rounded-xl font-semibold shadow-sm transition-all duration-200 transform-gpu hover:scale-105 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39] hover:shadow-lg border-2 border-[#D4A017]">
           Mark as Solved
         </button>
 
@@ -170,7 +170,7 @@ export default function CaseViewPage() {
           onClick={() =>
             router.push(`/dashboard/hearings/add?case=${caseData._id}`)
           }
-          className="w-full bg-black text-white py-3 rounded-lg font-semibold"
+          className="w-full bg-[#0B1C39] text-white py-3 rounded-xl font-semibold shadow-sm transition-all duration-200 transform-gpu hover:scale-105 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39] hover:shadow-lg border-2 border-[#D4A017]"
         >
           Add Hearing Date
         </button>
@@ -179,7 +179,7 @@ export default function CaseViewPage() {
           onClick={() =>
             router.push(`/dashboard/drafts/create?case=${caseData._id}`)
           }
-          className="w-full bg-gray-900 text-white py-3 rounded-lg font-semibold"
+          className="w-full bg-[#0B1C39] text-white py-3 rounded-xl font-semibold shadow-sm transition-all duration-200 transform-gpu hover:scale-105 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39] hover:shadow-lg border-2 border-[#D4A017]"
         >
           Generate AI Draft
         </button>

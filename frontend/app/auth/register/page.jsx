@@ -51,19 +51,19 @@ export default function RegisterPage() {
 
         <form onSubmit={submit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-[#0A1A2F]">Full Name</label>
+            <label className="block text-sm font-medium text-[#0B1C39]">Full Name</label>
             <input
               name="name"
               value={form.name}
               onChange={handleChange}
               placeholder="Your full name"
               required
-              className="mt-1 w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#D4A017] focus:border-[#0B1C39] focus:shadow-sm outline-none transition bg-white"
+              className="mt-1 w-full p-3 rounded-xl border border-gray-200 bg-white text-[#0B1C39] focus:ring-2 focus:ring-[#D4A017] focus:border-[#0B1C39] focus:shadow-sm outline-none transition"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-[#0A1A2F]">Email</label>
+            <label className="block text-sm font-medium text-[#0B1C39]">Email</label>
             <input
               name="email"
               type="email"
@@ -71,12 +71,12 @@ export default function RegisterPage() {
               onChange={handleChange}
               placeholder="email@example.com"
               required
-              className="mt-1 w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#D4A017] focus:border-[#0B1C39] focus:shadow-sm outline-none transition bg-white"
+              className="mt-1 w-full p-3 rounded-xl border border-gray-200 bg-white text-[#0B1C39] focus:ring-2 focus:ring-[#D4A017] focus:border-[#0B1C39] focus:shadow-sm outline-none transition"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-[#0A1A2F]">Password</label>
+            <label className="block text-sm font-medium text-[#0B1C39]">Password</label>
             <input
               name="password"
               type="password"
@@ -84,7 +84,7 @@ export default function RegisterPage() {
               onChange={handleChange}
               placeholder="********"
               required
-              className="mt-1 w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#D4A017] focus:border-[#0B1C39] focus:shadow-sm outline-none transition bg-white"
+              className="mt-1 w-full p-3 rounded-xl border border-gray-200 bg-white text-[#0B1C39] focus:ring-2 focus:ring-[#D4A017] focus:border-[#0B1C39] focus:shadow-sm outline-none transition"
             />
           </div>
 
@@ -103,7 +103,7 @@ export default function RegisterPage() {
 
         <p className="text-center text-sm mt-6">
           Already have an account?{" "}
-          <a href="/auth/login" className="text-[#0A1A2F] font-semibold hover:text-[#D4A017] transition duration-200">
+          <a href="/auth/login" className="text-[#0B1C39] font-semibold hover:text-[#D4A017] transition duration-200">
             Login
           </a>
         </p>

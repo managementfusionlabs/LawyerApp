@@ -2,7 +2,7 @@ export default function Select({ label, name, value, onChange, options = [], req
   return (
     <div className="w-full">
       {label && (
-        <label className="block text-sm font-medium text-[#0B1C39] mb-1">
+        <label className="block text-sm font-medium text-[#0B1C39] mb-2">
           {label}
         </label>
       )}
@@ -12,7 +12,7 @@ export default function Select({ label, name, value, onChange, options = [], req
         value={value}
         onChange={onChange}
         required={required}
-        className="w-full border rounded-md p-3 bg-white text-[#0B1C39] focus:outline-none focus:ring-2 focus:ring-[#D4A017] focus:border-[#0B1C39]"
+        className="w-full border border-gray-200 rounded-xl p-3 bg-white text-[#0B1C39] focus:outline-none focus:ring-2 focus:ring-[#D4A017] focus:border-[#0B1C39] transition-shadow duration-150"
       >
         {options.map((opt, i) => (
           <option key={i} value={opt.value}>

@@ -5,8 +5,8 @@ export default function ForgotPassword() {
         <h2 className="text-2xl md:text-3xl font-extrabold font-serif text-[#0A1A2F] tracking-wide mb-3">Reset Password</h2>
         <p className="text-sm text-gray-600 mb-6">Enter your email and we'll send you a secure link to reset your password.</p>
 
-        <label className="block text-sm font-medium text-[#0A1A2F] mb-2">Email address</label>
-        <input placeholder="you@company.com" className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#D4A017] focus:border-[#0B1C39] focus:shadow-sm outline-none transition mb-4" />
+        <label className="block text-sm font-medium text-[#0B1C39] mb-2">Email address</label>
+        <input placeholder="you@company.com" className="w-full p-3 rounded-xl border border-gray-200 bg-white text-[#0B1C39] focus:ring-2 focus:ring-[#D4A017] focus:border-[#0B1C39] focus:shadow-sm outline-none transition mb-4" />
 
         <button className="w-full bg-[#0B1C39] text-white font-semibold px-6 py-3 rounded-xl shadow-sm transition-all duration-200 transform-gpu hover:scale-105 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39] hover:shadow-lg border-2 border-[#D4A017]">Send Reset Link</button>
       </div>

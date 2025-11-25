@@ -54,7 +54,7 @@ export default function DraftListPage() {
           placeholder="Search by type or text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full p-3 border rounded-md bg-gray-50 focus:ring-2 focus:ring-[#D4A017] focus:border-[#0B1C39] outline-none"
+          className="w-full p-3 border border-gray-200 rounded-xl bg-white text-[#0B1C39] focus:ring-2 focus:ring-[#D4A017] focus:border-[#0B1C39] outline-none"
         />
       </div>
 
@@ -67,14 +67,14 @@ export default function DraftListPage() {
             <Link
               key={d._id}
               href={`/dashboard/drafts/${d._id}`}
-              className="block bg-white rounded-xl shadow p-4 border-l-4 border-[#D4A017]"
+              className="block bg-white rounded-xl shadow-lg border-l-4 border-[#D4A017] p-4 md:hover:shadow-2xl transform md:hover:-translate-y-1 transition"
             >
               <div className="flex justify-between items-start mb-2">
                 <div>
-                  <p className="font-semibold">{d.draftType || "Draft"}</p>
+                  <p className="font-semibold text-[#0B1C39]">{d.draftType || "Draft"}</p>
                   <p className="text-xs text-gray-500 mt-1">{new Date(d.createdAt).toLocaleString()}</p>
                 </div>
-                <div className="text-right text-xs text-[#0B1C39]"> Case: {d.caseId?.caseNumber.toUpperCase() || "—"}</div>
+                <div className="text-right text-xs text-[#0B1C39] font-medium">Case: {d.caseId?.caseNumber?.toUpperCase() || "—"}</div>
 
               </div>
 
@@ -113,8 +113,8 @@ export default function DraftListPage() {
                 <td className="p-3 text-sm text-gray-600">{new Date(d.createdAt).toLocaleString()}</td>
                 <td className="p-3">
                   <div className="flex gap-2">
-                    <Link href={`/dashboard/drafts/${d._id}`} className="text-[#0B1C39] font-medium transition-all duration-200 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39] px-2 py-1">View</Link>
-                    <a href={`${process.env.NEXT_PUBLIC_API}/drafts/${d._id}/pdf`} className="text-[#0B1C39] transition-all duration-200 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39] px-2 py-1">PDF</a>
+                    <Link href={`/dashboard/drafts/${d._id}`} className="text-[#0B1C39] font-medium transition-all duration-200 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39] px-3 py-1">View</Link>
+                    <a href={`${process.env.NEXT_PUBLIC_API}/drafts/${d._id}/pdf`} className="text-[#0B1C39] transition-all duration-200 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39] px-3 py-1">PDF</a>
                   </div>
                 </td>
               </tr>

@@ -17,7 +17,7 @@ export default function PasswordInput({ name = "password", value, onChange, labe
       <button
         type="button"
         onClick={() => setVisible((s) => !s)}
-        className="absolute right-3 top-3 text-sm text-gray-600 transition-all duration-200 transform-gpu hover:scale-105 rounded-full p-2 hover:bg-[#D4A017] hover:text-[#0B1C39] hover:shadow-md focus:outline-none"
+        className="absolute right-3 top-3 text-sm text-[#0B1C39] transition-all duration-200 transform-gpu hover:scale-105 rounded-full p-2 hover:bg-[#D4A017] hover:text-[#0B1C39] hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#D4A017]"
         aria-label={visible ? "Hide password" : "Show password"}
       >
         {visible ? "🙈" : "👁️"}

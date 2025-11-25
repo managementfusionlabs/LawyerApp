@@ -49,7 +49,7 @@ useEffect(() => {
         {/* Active Cases */}
         <Link
           href="/dashboard/cases"
-          className="p-5 bg-white rounded-xl shadow-lg border-l-4 border-[#D4A017] flex flex-col hover:shadow-2xl transition transform hover:-translate-y-1"
+          className="p-5 bg-white rounded-xl shadow-lg border-l-4 border-[#D4A017] flex flex-col md:hover:shadow-2xl transition transform md:hover:-translate-y-1"
         >
           <span className="text-gray-600 text-sm">Active Cases</span>
           <span className="text-3xl font-bold mt-2 text-[#0B1C39]">{stats.activeCases}</span>
@@ -58,7 +58,7 @@ useEffect(() => {
         {/* Solved Cases */}
         <Link
           href="/dashboard/cases?status=solved"
-          className="p-5 bg-white rounded-xl shadow-lg border-l-4 border-[#D4A017] flex flex-col hover:shadow-2xl transition transform hover:-translate-y-1"
+          className="p-5 bg-white rounded-xl shadow-lg border-l-4 border-[#D4A017] flex flex-col md:hover:shadow-2xl transition transform md:hover:-translate-y-1"
         >
           <span className="text-gray-600 text-sm">Solved Cases</span>
           <span className="text-3xl font-bold mt-2 text-[#0B1C39]">{stats.solvedCases}</span>
@@ -67,7 +67,7 @@ useEffect(() => {
         {/* Hearings */}
         <Link
           href="/dashboard/hearings"
-          className="p-5 bg-white rounded-xl shadow-lg border-l-4 border-[#D4A017] flex flex-col hover:shadow-2xl transition transform hover:-translate-y-1"
+          className="p-5 bg-white rounded-xl shadow-lg border-l-4 border-[#D4A017] flex flex-col md:hover:shadow-2xl transition transform md:hover:-translate-y-1"
         >
           <span className="text-gray-600 text-sm">Upcoming Hearings</span>
           <span className="text-3xl font-bold mt-2 text-[#0B1C39]">{stats.upcomingHearings}</span>

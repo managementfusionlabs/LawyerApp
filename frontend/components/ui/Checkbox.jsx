@@ -7,7 +7,7 @@ export default function Checkbox({ label, checked, onChange, name }) {
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
-        className="w-4 h-4 rounded border border-[#0B1C39] text-[#0B1C39]"
+        className="w-5 h-5 rounded border border-gray-200 bg-white checked:bg-[#0B1C39] checked:border-[#0B1C39] text-white focus:outline-none focus:ring-2 focus:ring-[#D4A017] transition-colors duration-150"
       />
       <span className="text-[#0B1C39]">{label}</span>
     </label>
