@@ -29,7 +29,9 @@ export default function CasesPage() {
 
   return (
     <div className="p-4 md:p-6">
-      <h1 className="text-2xl font-semibold font-serif mb-6 text-[#0B1C39]">Cases</h1>
+      <div className="sticky top-14 md:top-0 z-30 bg-[#F9FAFB] pt-2 pb-4 -mx-4 md:-mx-6 px-4 md:px-6" style={{ WebkitBackdropFilter: "blur(4px)" }}>
+        <h1 className="text-2xl font-semibold font-serif mb-3 text-[#0B1C39]">Cases</h1>
+      </div>
 
       {loading ? (
         <div>Loading cases...</div>

@@ -24,7 +24,7 @@ export default function DashboardLayout({ children }) {
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <Navbar />
-        <main className="p-6">{children}</main>
+        <main className="p-6 pt-14 md:pt-6 flex-1 overflow-auto" style={{ WebkitOverflowScrolling: "touch" }}>{children}</main>
       </div>
     </div>
   );

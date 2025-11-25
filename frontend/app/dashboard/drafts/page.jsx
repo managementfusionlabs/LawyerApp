@@ -41,21 +41,23 @@ export default function DraftListPage() {
 
   return (
     <div className="p-4 md:p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-xl md:text-2xl font-bold font-serif text-[#0B1C39]">Drafts</h1>
-        <Link href="/dashboard/drafts/create" className="bg-[#0B1C39] text-white px-4 py-2 rounded-md text-sm border-2 border-[#D4A017] transition-all duration-200 transform-gpu hover:scale-105 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39]">
-          + New Draft
-        </Link>
-      </div>
+      <div className="sticky top-14 md:top-0 z-30 bg-[#F9FAFB] pt-2 pb-4 -mx-4 md:-mx-6 px-4 md:px-6" style={{ WebkitBackdropFilter: "blur(4px)" }}>
+        <div className="flex justify-between items-center mb-3">
+          <h1 className="text-xl md:text-2xl font-bold font-serif text-[#0B1C39]">Drafts</h1>
+          <Link href="/dashboard/drafts/create" className="bg-[#0B1C39] text-white px-4 py-2 rounded-md text-sm border-2 border-[#D4A017] transition-all duration-200 transform-gpu hover:scale-105 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39]">
+            + New Draft
+          </Link>
+        </div>
 
-      <div className="mb-4">
-        <input
-          type="text"
-          placeholder="Search by type or text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full p-3 border border-gray-200 rounded-xl bg-white text-[#0B1C39] focus:ring-2 focus:ring-[#D4A017] focus:border-[#0B1C39] outline-none"
-        />
+        <div className="mb-2">
+          <input
+            type="text"
+            placeholder="Search by type or text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full p-3 border border-gray-200 rounded-xl bg-white text-[#0B1C39] focus:ring-2 focus:ring-[#D4A017] focus:border-[#0B1C39] outline-none"
+          />
+        </div>
       </div>
 
       {/* Mobile cards */}
