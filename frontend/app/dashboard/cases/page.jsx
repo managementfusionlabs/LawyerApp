@@ -32,6 +32,8 @@ export default function CasesPage() {
       <div className="sticky top-14 md:top-0 z-30 bg-[#F9FAFB] pt-2 pb-4 -mx-4 md:-mx-6 px-4 md:px-6" style={{ WebkitBackdropFilter: "blur(4px)" }}>
         <h1 className="text-2xl font-semibold font-serif mb-3 text-[#0B1C39]">Cases</h1>
       </div>
+      {/* spacer to ensure first item is fully visible below sticky header */}
+      <div className="h-16" aria-hidden="true" />
 
       {loading ? (
         <div>Loading cases...</div>
