@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Prevent mobile browsers from auto-zooming when text sizes change */
+html { -webkit-text-size-adjust: 100%; }
+
+/* Prevent iOS zoom when focusing form controls by ensuring minimum font-size */
+input, select, textarea, button { font-size: 16px; }
