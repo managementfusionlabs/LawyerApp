@@ -131,33 +131,40 @@ export default function CaseViewPage() {
         </p>
       </div>
 
-      {/* Hearings */}
+      {/* Hearings: show only past/heard hearings here. Future hearings appear in Upcoming Hearings page */}
       <div className="mt-8">
         <h2 className="text-lg font-bold mb-3">Hearings</h2>
 
-        {!caseData.hearings || caseData.hearings.length === 0 ? (
+        {(!caseData.hearings || caseData.hearings.length === 0) ? (
           <p className="text-gray-600 text-sm">No hearings added yet.</p>
         ) : (
-          <div className="space-y-3">
-            {caseData.hearings.map((h) => (
-              <div
-                key={h._id}
-                className="bg-white border shadow p-4 rounded-lg space-y-1"
-              >
-                <p className="font-medium">
-                  Date: {new Date(h.date).toLocaleDateString()}
-                </p>
+          (() => {
+            const startOfToday = new Date();
+            startOfToday.setHours(0,0,0,0);
+            const pastHearings = caseData.hearings.filter((h) => {
+              try {
+                return new Date(h.date) < startOfToday;
+              } catch (e) {
+                return false;
+              }
+            });
 
-                {h.court && (
-                  <p className="text-sm text-gray-700">Court: {h.court}</p>
-                )}
+            if (pastHearings.length === 0) {
+              return <p className="text-gray-600 text-sm">No past hearings. Upcoming hearings are shown in the Upcoming Hearings page.</p>;
+            }
 
-                {h.notes && (
-                  <p className="text-sm text-gray-600">Notes: {h.notes}</p>
-                )}
+            return (
+              <div className="space-y-3">
+                {pastHearings.map((h) => (
+                  <div key={h._id} className="bg-white border shadow p-4 rounded-lg space-y-1">
+                    <p className="font-medium">Date: {new Date(h.date).toLocaleDateString()}</p>
+                    {h.court && <p className="text-sm text-gray-700">Court: {h.court}</p>}
+                    {h.notes && <p className="text-sm text-gray-600">Notes: {h.notes}</p>}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            );
+          })()
         )}
       </div>
 

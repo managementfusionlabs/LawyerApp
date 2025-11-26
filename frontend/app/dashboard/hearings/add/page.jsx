@@ -46,7 +46,8 @@ export default function AddHearingPage() {
         return;
       }
 
-      router.push(`/dashboard/cases/${caseId}`);
+      // After adding a hearing, go to Dashboard (shows Upcoming Hearings card)
+      router.push(`/dashboard`);
     } catch (err) {
       console.log(err);
       alert("Server error");
