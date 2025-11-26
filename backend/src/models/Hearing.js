@@ -17,6 +17,10 @@ const hearingSchema = new mongoose.Schema(
       required: true,
     },
     court: String,
+    status: {
+      type: String,
+      default: "upcoming",
+    },
     notes: String,
   },
   { timestamps: true }
