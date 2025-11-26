@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
@@ -8,6 +8,9 @@ export default function CasesPage() {
   const [cases, setCases] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
+  const [search, setSearch] = useState("");
+  const [debounced, setDebounced] = useState("");
+  const inputRef = useRef(null);
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -36,15 +39,31 @@ export default function CasesPage() {
     return "px-3 py-1.5 rounded-xl text-sm font-medium bg-white text-[#0B1C39] border border-gray-200 hover:scale-105 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39] hover:shadow-lg";
   }
 
-  const visibleCases = cases.filter((c) => {
+
+  const activeCount = cases.filter((c) => !(c.status || "").toLowerCase().includes("solved")).length;
+  const solvedCount = cases.filter((c) => (c.status || "").toLowerCase().includes("solved")).length;
+
+  // debounce search input
+  useEffect(() => {
+    const t = setTimeout(() => setDebounced(search.trim().toLowerCase()), 300);
+    return () => clearTimeout(t);
+  }, [search]);
+
+  const searched = cases.filter((c) => {
+    const q = debounced;
+    if (!q) return true;
+    const caseNo = (c.caseNo || c.caseNumber || "").toString().toLowerCase();
+    const client = (c.clientName || "").toString().toLowerCase();
+    const id = (c._id || "").toString().toLowerCase();
+    return caseNo.includes(q) || client.includes(q) || id.includes(q);
+  });
+
+  const visibleCases = searched.filter((c) => {
     if (filter === "all") return true;
     if (filter === "active") return !(c.status || "").toLowerCase().includes("solved");
     if (filter === "solved") return (c.status || "").toLowerCase().includes("solved");
     return true;
   });
-
-  const activeCount = cases.filter((c) => !(c.status || "").toLowerCase().includes("solved")).length;
-  const solvedCount = cases.filter((c) => (c.status || "").toLowerCase().includes("solved")).length;
 
   return (
     <div className="p-4 md:p-6">
@@ -84,6 +103,37 @@ export default function CasesPage() {
                 </span>
               )}
             </button>
+          </div>
+
+          <div className="ml-2 w-full max-w-sm">
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#0B1C39]">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-4.35-4.35m0 0A7 7 0 1010.65 10.65a7 7 0 005.999 5.999z"></path></svg>
+              </span>
+
+              <input
+                ref={inputRef}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search by case no, name or id"
+                aria-label="Search cases by number, name or id"
+                className="pl-10 pr-10 py-2 w-full rounded-xl border border-[#D4A017] bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#D4A017] shadow-md"
+              />
+
+              {search && (
+                <button
+                  aria-label="Clear search"
+                  onClick={() => {
+                    setSearch("");
+                    setDebounced("");
+                    inputRef.current?.focus();
+                  }}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#D4A017] text-[#0B1C39] hover:opacity-90 transition"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -3,54 +3,67 @@
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 
-export default function UpcomingHearingsPage() {
+export default function PastHearingsPage() {
   const [hearings, setHearings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [search, setSearch] = useState("");
   const [debounced, setDebounced] = useState("");
   const inputRef = useRef(null);
 
   useEffect(() => {
     let mounted = true;
-    async function load() {
+    async function loadPast() {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API}/hearings/upcoming`, { credentials: "include" });
-        const data = await res.json();
-        if (!mounted) return;
-        const raw = Array.isArray(data.hearings) ? data.hearings : data.hearings || [];
+        // Try dedicated backend endpoint first
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API}/hearings/past`, { credentials: "include" });
+        if (res.ok) {
+          const data = await res.json();
+          if (!mounted) return;
+          setHearings(Array.isArray(data.hearings) ? data.hearings : data.hearings || []);
+          return;
+        }
 
-        // Enrich hearings with case details if caseId is not populated
-        const enriched = await Promise.all(
-          raw.map(async (h) => {
-            if (h.caseId && typeof h.caseId === "object" && (h.caseId.caseNumber || h.caseId.clientName)) {
-              return h; // already populated
+        // Fallback: no dedicated endpoint — fetch all cases and request their hearings
+        const cr = await fetch(`${process.env.NEXT_PUBLIC_API}/cases`, { credentials: "include" });
+        if (!cr.ok) throw new Error("Failed to load cases for fallback");
+        const cj = await cr.json();
+        const allCases = Array.isArray(cj) ? cj : cj.cases || [];
+
+        const gathered = [];
+        await Promise.all(
+          allCases.map(async (c) => {
+            try {
+              const hr = await fetch(`${process.env.NEXT_PUBLIC_API}/hearings/case/${c._id}`, { credentials: "include" });
+              if (!hr.ok) return;
+              const hj = await hr.json();
+              const list = Array.isArray(hj.hearings) ? hj.hearings : hj.hearings || [];
+              list.forEach((h) => {
+                if (new Date(h.date) < new Date()) gathered.push({ ...h, caseId: c });
+              });
+            } catch (err) {
+              console.error("Failed to fetch hearings for case", c._id, err);
             }
-            if (h.caseId) {
-              try {
-                const cr = await fetch(`${process.env.NEXT_PUBLIC_API}/cases/${h.caseId}`, { credentials: "include" });
-                if (cr.ok) {
-                  const cj = await cr.json();
-                  return { ...h, caseId: cj.case || cj };
-                }
-              } catch (err) {
-                console.error("Failed to fetch case for hearing", h.caseId, err);
-              }
-            }
-            return h;
           })
         );
 
-        setHearings(enriched);
+        if (!mounted) return;
+        // sort past by most recent first
+        gathered.sort((a, b) => new Date(b.date) - new Date(a.date));
+        setHearings(gathered);
       } catch (err) {
-        console.error("Failed to load upcoming hearings", err);
+        console.error(err);
+        if (mounted) setError(err.message || String(err));
       } finally {
         if (mounted) setLoading(false);
       }
     }
-    load();
+
+    loadPast();
     return () => (mounted = false);
   }, []);
 
+  // debounce search input
   useEffect(() => {
     const t = setTimeout(() => setDebounced(search.trim().toLowerCase()), 300);
     return () => clearTimeout(t);
@@ -59,11 +72,13 @@ export default function UpcomingHearingsPage() {
   const filtered = hearings.filter((h) => {
     const q = debounced;
     if (!q) return true;
-    const caseNum = (h.caseId && (h.caseId.caseNumber || (typeof h.caseId === "string" ? h.caseId : ""))) || "";
+    const caseNo = (h.caseId && (h.caseId.caseNumber || (typeof h.caseId === 'string' ? h.caseId : ''))) || "";
     const client = (h.caseId && h.caseId.clientName) || "";
+    const dateStr = h.date ? new Date(h.date).toLocaleString().toLowerCase() : "";
     return (
-      caseNum.toString().toLowerCase().includes(q) ||
+      caseNo.toString().toLowerCase().includes(q) ||
       client.toString().toLowerCase().includes(q) ||
+      dateStr.includes(q) ||
       (h._id || "").toLowerCase().includes(q)
     );
   });
@@ -71,19 +86,12 @@ export default function UpcomingHearingsPage() {
   return (
     <div className="p-4 md:p-6 overflow-x-hidden">
       <div className="sticky top-14 md:top-0 z-30 bg-[#F9FAFB] pt-2 pb-4 -mx-4 md:-mx-6 px-4 md:px-6" style={{ WebkitBackdropFilter: "blur(4px)" }}>
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-semibold font-serif mb-0 text-[#0B1C39]">Upcoming Hearings</h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-semibold font-serif mb-0 text-[#0B1C39]">Past Hearings</h1>
 
-            <button
-              onClick={() => window.location.href = '/dashboard/hearings/past'}
-              className="ml-1 inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium bg-white text-[#0B1C39] border-2 border-[#D4A017] hover:bg-[#0B1C39] hover:text-white transition-all duration-150 shadow-sm"
-              title="View past hearings"
-            >
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h4l3 9 4-18 3 9h4"></path></svg>
-              <span className="hidden sm:inline">Past</span>
-            </button>
-          </div>
+          <Link href="/dashboard/hearings" className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium bg-white text-[#0B1C39] border-2 border-[#D4A017] hover:bg-[#0B1C39] hover:text-white transition-all duration-150 shadow-sm">
+            Back to Upcoming
+          </Link>
 
           <div className="ml-auto w-full max-w-sm">
             <div className="relative">
@@ -95,8 +103,8 @@ export default function UpcomingHearingsPage() {
                 ref={inputRef}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search by case no"
-                aria-label="Search hearings by case number or client"
+                placeholder="Search by case no, name or date"
+                aria-label="Search past hearings"
                 className="pl-10 pr-10 py-2 w-full rounded-xl border border-[#D4A017] bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#D4A017] shadow-md"
               />
 
@@ -121,11 +129,11 @@ export default function UpcomingHearingsPage() {
       <div className="h-16" aria-hidden />
 
       {loading ? (
-        <div className="p-4">Loading upcoming hearings...</div>
+        <div className="p-4">Loading past hearings...</div>
+      ) : error ? (
+        <div className="p-4 text-red-600">{error}</div>
       ) : hearings.length === 0 ? (
-        <div className="p-4 text-gray-600">No upcoming hearings.</div>
-      ) : filtered.length === 0 ? (
-        <div className="p-4 text-gray-600">No hearings match your search.</div>
+        <div className="p-4 text-gray-600">No past hearings found.</div>
       ) : (
         <div className="space-y-3">
           {filtered.map((h) => (
@@ -142,17 +150,10 @@ export default function UpcomingHearingsPage() {
                   {h.caseId?.clientName && <p className="text-sm text-gray-700">{h.caseId.clientName}</p>}
                 </div>
 
-                  <div className="text-right">
+                <div className="text-right">
                   <p className="text-sm text-gray-600">Court</p>
                   <p className="font-medium text-[#0B1C39]">{h.court || "—"}</p>
-                  <div className="mt-2">
-                    <Link
-                      href={`/dashboard/hearings/${h._id}`}
-                      className="inline-block px-3 py-1.5 rounded-xl text-sm font-medium bg-[#0B1C39] text-white border-2 border-[#D4A017] transition-all duration-200 transform-gpu hover:scale-105 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39] shadow-sm"
-                    >
-                      View Hearing
-                    </Link>
-                  </div>
+                  {/* View Hearing intentionally removed for past hearings */}
                 </div>
               </div>
               {h.notes && <p className="mt-3 text-sm text-gray-700">Notes: {h.notes}</p>}

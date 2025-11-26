@@ -46,10 +46,14 @@ export const getUpcomingHearings = async (req, res) => {
   try {
     const lawyerId = req.user.id;
 
+    // include hearings scheduled for today and later — use start of today
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+
     const hearings = await Hearing.find({
       lawyerId,
       status: "upcoming",
-      date: { $gte: new Date() },
+      date: { $gte: startOfToday },
     }).sort({ date: 1 });
 
     return res.json({ hearings });

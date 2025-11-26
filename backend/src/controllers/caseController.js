@@ -17,9 +17,13 @@ export const getCaseStats = async (req, res) => {
       status: "solved",
     });
 
+    // count hearings from start of today onwards so "today" is considered upcoming
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+
     const upcomingHearings = await Hearing.countDocuments({
       lawyerId,
-      date: { $gte: new Date() },
+      date: { $gte: startOfToday },
     });
 
     return res.json({
