@@ -9,6 +9,8 @@ const links = [
   { name: "Cases", href: "/dashboard/cases" },
   { name: "Drafts", href: "/dashboard/drafts" },
   { name: "Settings", href: "/dashboard/settings" },
+  { name: "Profile", href: "/dashboard/profile" },
+
 ];
 
 export default function Sidebar() {
