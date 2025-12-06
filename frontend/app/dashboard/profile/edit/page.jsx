@@ -83,73 +83,95 @@ export default function EditProfilePage() {
 
   const updateField = (k, v) => setForm(prev => ({ ...prev, [k]: v }));
 
-  const handleSave = async (e) => {
-    e.preventDefault();
-    setSaving(true);
+const handleSave = async (e) => {
+  e.preventDefault();
+  setSaving(true);
 
-    // prepare payload: convert CSV strings to arrays/objects
-    const payload = {
-      name: form.name,
-      title: form.title,
-      profileImage: form.profileImage,
-      phone: form.phone,
-      officeAddress: form.officeAddress,
-      clientFacingName: form.clientFacingName,
-      practiceAreas: form.practiceAreas.split(",").map(s => s.trim()).filter(Boolean),
-      jurisdictions: form.jurisdictions.split(",").map(s => s.trim()).filter(Boolean),
-      yearsOfExperience: form.yearsOfExperience ? Number(form.yearsOfExperience) : 0,
-      languages: form.languages.split(",").map(s => s.trim()).filter(Boolean),
-      website: form.website,
-      shortBio: form.shortBio,
-      longBio: form.longBio,
-      consultationFee: form.consultationFee,
-      availabilityNotes: form.availabilityNotes,
-      awards: form.awards.split(",").map(s => s.trim()).filter(Boolean),
-      memberships: form.memberships.split(",").map(s => s.trim()).filter(Boolean),
-      social: {
-        linkedin: form.social_linkedin,
-        twitter: form.social_twitter,
-      },
-      // admissions parsing: format expected "Jurisdiction:BarNumber:Year; ..."
-      admissions: form.admissions.split(";").map(s => {
-        const parts = s.split(":").map(p => p.trim());
-        return { jurisdiction: parts[0] || "", barNumber: parts[1] || "", admittedYear: parts[2] ? Number(parts[2]) : undefined };
-      }).filter(a => a.jurisdiction),
-      // education parsing "School|Degree|Year; ..."
-      education: form.education.split(";").map(s => {
-        const parts = s.split("|").map(p => p.trim());
-        return { school: parts[0] || "", degree: parts[1] || "", year: parts[2] || "" };
-      }).filter(e => e.school),
-      publications: form.publications.split(";").map(s => {
-        const parts = s.split("|").map(p => p.trim());
-        return { title: parts[0] || "", link: parts[1] || "" };
-      }).filter(p => p.title),
-    };
-
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API}/auth/me`, {
-        method: "PUT",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        alert(data.error || "Failed to update");
-        setSaving(false);
-        return;
-      }
-
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 2200);
-    } catch (err) {
-      console.error(err);
-      alert("Server error");
-    } finally {
-      setSaving(false);
-    }
+  const payload = {
+    name: form.name,
+    title: form.title,
+    profileImage: form.profileImage,
+    phone: form.phone,
+    officeAddress: form.officeAddress,
+    clientFacingName: form.clientFacingName,
+    practiceAreas: form.practiceAreas.split(",").map(s => s.trim()).filter(Boolean),
+    jurisdictions: form.jurisdictions.split(",").map(s => s.trim()).filter(Boolean),
+    yearsOfExperience: form.yearsOfExperience ? Number(form.yearsOfExperience) : user.yearsOfExperience,
+    languages: form.languages.split(",").map(s => s.trim()).filter(Boolean),
+    website: form.website,
+    shortBio: form.shortBio,
+    longBio: form.longBio,
+    consultationFee: form.consultationFee,
+    availabilityNotes: form.availabilityNotes,
+    awards: form.awards.split(",").map(s => s.trim()).filter(Boolean),
+    memberships: form.memberships.split(",").map(s => s.trim()).filter(Boolean),
+    social: {
+      linkedin: form.social_linkedin,
+      twitter: form.social_twitter,
+    },
+    admissions: form.admissions.split(";").map(s => {
+      const parts = s.split(":").map(p => p.trim());
+      return { jurisdiction: parts[0] || "", barNumber: parts[1] || "", admittedYear: parts[2] ? Number(parts[2]) : undefined };
+    }).filter(a => a.jurisdiction),
+    education: form.education.split(";").map(s => {
+      const parts = s.split("|").map(p => p.trim());
+      return { school: parts[0] || "", degree: parts[1] || "", year: parts[2] || "" };
+    }).filter(e => e.school),
+    publications: form.publications.split(";").map(s => {
+      const parts = s.split("|").map(p => p.trim());
+      return { title: parts[0] || "", link: parts[1] || "" };
+    }).filter(p => p.title),
   };
+
+  // 🔥 Remove empty fields so they don't overwrite user data
+  Object.keys(payload).forEach((key) => {
+    const value = payload[key];
+
+    // Remove empty strings
+    if (value === "" || value === null) {
+      delete payload[key];
+    }
+
+    // Remove empty arrays
+    if (Array.isArray(value) && value.length === 0) {
+      delete payload[key];
+    }
+
+    // Remove empty nested social fields
+    if (key === "social") {
+      if (!payload.social.linkedin && !payload.social.twitter) {
+        delete payload.social;
+      }
+    }
+  });
+
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API}/auth/me`, {
+      method: "PUT",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.error || "Failed to update");
+      setSaving(false);
+      return;
+    }
+
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 2200);
+
+  } catch (err) {
+    console.error(err);
+    alert("Server error");
+  } finally {
+    setSaving(false);
+  }
+};
+
 
   if (loading) return <div className="p-6 flex justify-center"><Loader /></div>;
 

@@ -101,7 +101,7 @@ export const updateProfile = async (req, res) => {
       if (typeof updates[k] !== "undefined") payload[k] = updates[k];
     });
 
-    const updated = await User.findByIdAndUpdate(req.user._id, payload, { new: true }).lean();
+    const updated = await User.findByIdAndUpdate(req.user.id, payload, { new: true }).lean();
 
     return res.json({ user: updated });
   } catch (err) {
