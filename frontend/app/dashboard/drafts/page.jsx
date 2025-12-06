@@ -2,7 +2,18 @@
 
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
-import Loader from "@/components/ui/Loader";
+import Loader from "@/components/ui/Loader"; // Assuming you have this from previous steps
+
+// Premium Icon Set
+const Icons = {
+  Search: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>,
+  Close: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/></svg>,
+  Plus: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"/></svg>,
+  FileText: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>,
+  Briefcase: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>,
+  Eye: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>,
+  Download: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+};
 
 export default function DraftListPage() {
   const [drafts, setDrafts] = useState([]);
@@ -44,126 +55,145 @@ export default function DraftListPage() {
 
   if (loading) {
     return (
-      <div className="p-6 flex justify-center">
-        <Loader text="Loading drafts..." />
+      <div className="min-h-[50vh] flex flex-col items-center justify-center">
+         {/* Use your premium loader here */}
+         <div className="w-10 h-10 border-4 border-[#D4A017] border-t-transparent rounded-full animate-spin"></div>
+         <p className="mt-4 text-[#0B1C39] font-medium tracking-wide">Accessing Archives...</p>
       </div>
     );
   }
 
   return (
-    <div className="p-4 md:p-6 overflow-x-hidden">
-      <div className="sticky top-14 md:top-0 z-30 bg-[#F9FAFB] pt-2 pb-4 -mx-4 md:-mx-6 px-4 md:px-6" style={{ WebkitBackdropFilter: "blur(4px)" }}>
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
-          <h1 className="text-xl md:text-2xl font-bold font-serif text-[#0B1C39]">Drafts</h1>
-          <Link href="/dashboard/drafts/create" className="bg-[#0B1C39] text-white px-4 py-2 rounded-md text-sm border-2 border-[#D4A017] transition-all duration-200 transform-gpu hover:scale-105 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39]">
-            + New Draft
-          </Link>
+    <div className="w-full max-w-7xl mx-auto p-4 md:p-8 space-y-8 min-h-screen">
+      
+      {/* --- STICKY HEADER & CONTROLS --- */}
+      <div className="sticky top-0 z-30 bg-[#F9FAFB]/95 backdrop-blur-md py-4 border-b border-[#D4A017]/10 -mx-4 md:-mx-8 px-4 md:px-8 shadow-sm transition-all">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          
+          {/* Title */}
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-bold font-serif text-[#0B1C39] shrink-0">
+              Legal Drafts
+            </h1>
+            <span className="bg-[#D4A017]/10 text-[#D4A017] text-xs font-bold px-2 py-1 rounded-full border border-[#D4A017]/20">
+              {filtered.length} DOCS
+            </span>
+          </div>
 
-          <div className="w-full md:w-80">
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#0B1C39]">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-4.35-4.35m0 0A7 7 0 1010.65 10.65a7 7 0 005.999 5.999z"></path></svg>
+          {/* Controls: Search & Create Button */}
+          <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
+            
+            {/* Search Input */}
+            <div className="relative group w-full md:w-80">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-[#D4A017] transition-colors">
+                <Icons.Search />
               </span>
-
               <input
                 ref={inputRef}
-                type="text"
-                placeholder="Search by type, text or case no"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                aria-label="Search drafts by type, text or case number"
-                className="pl-10 pr-10 py-2 w-full rounded-xl border border-[#D4A017] bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#D4A017] shadow-md"
+                placeholder="Search documents..."
+                className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-[#0B1C39] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#D4A017]/20 focus:border-[#D4A017] transition-all shadow-sm"
               />
-
               {search && (
                 <button
-                  aria-label="Clear search"
-                  onClick={() => {
-                    setSearch("");
-                    setDebounced("");
-                    inputRef.current?.focus();
-                  }}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#D4A017] text-[#0B1C39] hover:opacity-90 transition"
+                  onClick={() => { setSearch(""); setDebounced(""); inputRef.current?.focus(); }}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-[#0B1C39]"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                  <Icons.Close />
                 </button>
               )}
             </div>
+
+            {/* New Draft Button - Primary Action */}
+            <Link 
+              href="/dashboard/drafts/create" 
+              className="flex items-center justify-center gap-2 bg-[#0B1C39] text-white px-6 py-2.5 rounded-xl font-medium shadow-lg shadow-[#0B1C39]/20 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 group border border-[#0B1C39]"
+            >
+              <span className="text-[#D4A017] group-hover:rotate-90 transition-transform duration-300"><Icons.Plus /></span>
+              <span>New Draft</span>
+            </Link>
+
           </div>
         </div>
-        </div>
+      </div>
 
-      {/* spacer so first draft card isn't hidden under the sticky header */}
-      <div className="h-16" aria-hidden="true" />
-
-      {/* Mobile cards */}
-      <div className="md:hidden space-y-4">
+      {/* --- CONTENT AREA (List of Cards) --- */}
+      <div className="space-y-4">
+        
         {filtered.length === 0 ? (
-          <div className="text-gray-600 p-4 bg-white rounded shadow">No drafts found.</div>
+          <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-300">
+             <div className="w-16 h-16 bg-[#F8F8F8] rounded-full flex items-center justify-center mx-auto mb-4 text-gray-400">
+               <Icons.FileText />
+             </div>
+             <p className="text-[#0B1C39] font-medium text-lg">No documents found</p>
+             <p className="text-gray-400 text-sm mt-1">Try adjusting your search or create a new draft.</p>
+          </div>
         ) : (
           filtered.map((d) => (
-            <Link
+            <div
               key={d._id}
-              href={`/dashboard/drafts/${d._id}`}
-              className="block bg-white rounded-xl shadow-lg border-l-4 border-[#D4A017] p-4 md:hover:shadow-2xl transform md:hover:-translate-y-1 transition"
+              className="group relative bg-white rounded-xl p-5 md:p-6 border border-[#D4A017]/20 shadow-sm transition-all duration-300 hover:shadow-xl hover:border-[#D4A017] hover:-translate-y-1 flex flex-col md:flex-row gap-6 md:items-center"
             >
-              <div className="flex justify-between items-start mb-2">
-                <div>
-                  <p className="font-semibold text-[#0B1C39]">{d.draftType || "Draft"}</p>
-                  <p className="text-xs text-gray-500 mt-1">{new Date(d.createdAt).toLocaleString()}</p>
+              {/* Icon & Type Info */}
+              <div className="flex items-start gap-4 md:w-1/4 shrink-0">
+                <div className="w-12 h-12 rounded-lg bg-[#FDF8E8] text-[#D4A017] border border-[#D4A017]/20 flex items-center justify-center shrink-0">
+                  <Icons.FileText />
                 </div>
-                <div className="text-right text-xs text-[#0B1C39] font-medium">Case: {d.caseId?.caseNumber?.toUpperCase() || "—"}</div>
-
+                <div>
+                  <h3 className="font-serif font-bold text-[#0B1C39] text-lg leading-tight">
+                    {d.draftType || "Legal Draft"}
+                  </h3>
+                  <p className="text-xs text-gray-400 mt-1 uppercase tracking-wider">
+                    {new Date(d.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric'})}
+                  </p>
+                </div>
               </div>
 
-              <p className="text-sm text-gray-700 line-clamp-3">{d.content || "No content"}</p>
-            </Link>
+              {/* Middle Content: Excerpt & Case */}
+              <div className="flex-1 space-y-3">
+                 {/* Case Tag */}
+                 <div className="flex items-center gap-2 text-xs font-medium text-[#0B1C39]/70">
+                    <span className="text-[#D4A017]"><Icons.Briefcase /></span>
+                    <span className="bg-[#F8F8F8] px-2 py-0.5 rounded border border-gray-200">
+                      {d.caseId?.caseNumber?.toUpperCase() || "UNASSIGNED"}
+                    </span>
+                 </div>
+
+                 {/* Excerpt */}
+                 <p className="text-sm text-gray-600 line-clamp-2 leading-relaxed font-serif italic">
+                   "{d.content || "No content available..."}"
+                 </p>
+              </div>
+
+              {/* Actions Area */}
+              <div className="flex items-center gap-3 md:justify-end md:w-auto pt-4 md:pt-0 border-t md:border-t-0 border-gray-100">
+                
+                {/* View Button */}
+                <Link 
+                  href={`/dashboard/drafts/${d._id}`} 
+                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-[#0B1C39] bg-white border border-gray-200 hover:border-[#D4A017] hover:bg-[#D4A017]/10 transition-colors group/btn"
+                  title="View Editor"
+                >
+                  <span className="group-hover/btn:scale-110 transition-transform"><Icons.Eye /></span>
+                  <span>Open</span>
+                </Link>
+
+                {/* PDF Button */}
+                {/* <a 
+                  href={`${process.env.NEXT_PUBLIC_API}/drafts/${d._id}/pdf`}
+                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-[#D4A017] bg-[#0B1C39] border border-[#0B1C39] hover:bg-[#0B1C39]/90 transition-colors shadow-md"
+                  title="Download PDF"
+                >
+                   <Icons.Download />
+                   <span className="md:hidden">PDF</span>
+                </a> */}
+              </div>
+
+            </div>
           ))
         )}
       </div>
-
-      {/* Desktop table */}
-      <div className="hidden md:block bg-white rounded-xl shadow border overflow-x-auto">
-        <table className="w-full">
-          <thead className="bg-[#F4F6F8] text-left text-sm">
-            <tr className="text-[#0B1C39]">
-              <th className="p-3">Type</th>
-              <th className="p-3">Case</th>
-              <th className="p-3">Excerpt</th>
-              <th className="p-3">Created</th>
-              <th className="p-3">Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {filtered.length === 0 && (
-              <tr>
-                <td colSpan={5} className="p-6 text-center text-gray-600">No drafts found.</td>
-              </tr>
-            )}
-
-            {filtered.map((d) => (
-              <tr key={d._id} className="border-t hover:bg-gray-50">
-                <td className="p-3 font-medium text-[#0B1C39]">{ "GENERATED"}</td>
-                <td className="p-3">{d.caseId?.caseNumber.toUpperCase() || "—"}</td>
-
-                <td className="p-3 text-sm line-clamp-2">{d.content ? d.content.slice(0, 120) + (d.content.length>120?"...":"") : "—"}</td>
-                <td className="p-3 text-sm text-gray-600">{new Date(d.createdAt).toLocaleString()}</td>
-                <td className="p-3">
-                  <div className="flex gap-2">
-                    <Link href={`/dashboard/drafts/${d._id}`} className="text-[#0B1C39] font-medium transition-all duration-200 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39] px-3 py-1">View</Link>
-                    <a href={`${process.env.NEXT_PUBLIC_API}/drafts/${d._id}/pdf`} className="text-[#0B1C39] transition-all duration-200 hover:rounded-2xl hover:bg-[#D4A017] hover:text-[#0B1C39] px-3 py-1">PDF</a>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* <div className="mt-6 text-xs text-gray-500">
-        Uploaded file reference: <code className="break-all">{"/mnt/data/2025-11-21T19-38-12.471Z.png"}</code>
-      </div> */}
     </div>
   );
 }

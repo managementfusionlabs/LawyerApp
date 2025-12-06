@@ -14,117 +14,206 @@ export const createPdf = async (req, res) => {
       return res.status(404).json({ error: "AI draft not found. Generate draft first." });
 
     // HTML TEMPLATE
-   const html = `
+const html = `
+<!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8" />
     <style>
+      /* --- PRINT SETTINGS --- */
+      @page {
+        size: A4;
+        margin: 1.5in 1in 1in 1.25in; /* Top, Right, Bottom, Left (Left is larger for binding) */
+      }
+
       body {
-        font-family: "Times New Roman", serif;
-        padding: 35px;
-        line-height: 1.55;
-        font-size: 14px;
-        background: #f7f7f7;
-      }
-
-      .page {
+        font-family: "Times New Roman", Times, serif;
+        font-size: 12pt; /* Standard Court Font Size */
+        line-height: 1.6; /* Double or 1.5 spacing is standard for readability */
+        color: #000;
         background: #fff;
-        padding: 35px 40px;
-        border: 2px solid #000;
-      }
-
-      .title-box {
-        border: 2px solid #000;
-        padding: 10px;
-        text-align: center;
-        margin-bottom: 25px;
-      }
-
-      .title-box h1 {
         margin: 0;
-        font-size: 20px;
+        padding: 0;
+      }
+
+      /* --- LAYOUT CONTAINERS --- */
+      .page-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px; /* Padding for web view */
+        background: #fff;
+      }
+
+      /* --- HEADER / COURT NAME --- */
+      .court-header {
+        text-align: center;
         text-transform: uppercase;
         font-weight: bold;
+        font-size: 14pt;
+        margin-bottom: 5px;
+        text-decoration: underline;
       }
 
-      .section-title {
-        margin-top: 28px;
-        margin-bottom: 10px;
+      .jurisdiction {
+        text-align: center;
         font-weight: bold;
-        font-size: 16px;
-        border-bottom: 1px solid #222;
-        padding-bottom: 4px;
+        font-size: 12pt;
+        margin-bottom: 20px;
+      }
+
+      .case-number {
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 30px;
+      }
+
+      /* --- CAUSE TITLE (Parties) --- */
+      .cause-title {
+        width: 100%;
+        margin-bottom: 30px;
+      }
+
+      .party-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+
+      .party-name {
+        font-weight: bold;
         text-transform: uppercase;
+        width: 70%;
       }
 
-      .field {
-        margin: 3px 0;
-      }
-
-      .label {
+      .party-role {
         font-weight: bold;
+        font-style: italic;
+        text-align: right;
+        width: 25%;
       }
 
-      .draft-box {
-        border: 1px solid #999;
-        padding: 15px;
-        margin-top: 10px;
-        white-space: pre-wrap;
+      .versus {
+        text-align: center;
+        font-weight: bold;
+        margin: 15px 0;
+        letter-spacing: 2px;
       }
 
-      .signature {
-        margin-top: 50px;
+      /* --- SUBJECT / TITLE --- */
+      .draft-subject {
+        text-align: center;
+        font-weight: bold;
+        text-transform: uppercase;
+        text-decoration: underline;
+        margin: 30px 0 20px 0;
+        font-size: 13pt;
+      }
+
+      /* --- MAIN CONTENT --- */
+      .content-body {
+        text-align: justify;
+        text-justify: inter-word;
+        white-space: pre-wrap; /* Preserves tabs and newlines */
+      }
+
+      /* --- FOOTER / SIGNATURE --- */
+      .signature-section {
+        margin-top: 60px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+
+      .place-date {
+        text-align: left;
+      }
+
+      .advocate-sign {
         text-align: right;
         font-weight: bold;
       }
 
-      .footer {
-        margin-top: 40px;
+      .footer-note {
+        margin-top: 50px;
+        font-size: 10pt;
         text-align: center;
-        font-size: 12px;
-        color: #777;
+        color: #444;
+        border-top: 1px solid #ddd;
+        padding-top: 5px;
+      }
+      
+      /* Hide elements during print if needed */
+      @media print {
+        body { background: none; }
+        .page-container { padding: 0; margin: 0; }
       }
     </style>
   </head>
 
   <body>
-    <div class="page">
+    <div class="page-container">
 
-      <div class="title-box">
-        <h1>Legal Draft – Jammu & Kashmir</h1>
+      <div class="court-header">
+        IN THE COURT OF ${caseData.courtName?.toUpperCase() || "THE HON'BLE COURT"}
+      </div>
+      <div class="jurisdiction">
+        AT JAMMU & KASHMIR
       </div>
 
-      <!-- CLIENT SECTION -->
-      <div class="section-title">Client Information</div>
-      <div class="field"><span class="label">Name:</span> ${caseData.clientName}</div>
-      <div class="field"><span class="label">Phone:</span> ${caseData.phone}</div>
-      <div class="field"><span class="label">Email:</span> ${caseData.email}</div>
-      <div class="field"><span class="label">Address:</span> ${caseData.address}</div>
+      <div class="case-number">
+        CASE NO. ${caseData.caseNumber} OF ${new Date().getFullYear()}
+      </div>
 
-      <!-- CASE DETAILS -->
-      <div class="section-title">Case Details</div>
-      <div class="field"><span class="label">Case Type:</span> ${caseData.caseType}</div>
-      <div class="field"><span class="label">Case Number:</span> ${caseData.caseNumber}</div>
-      <div class="field"><span class="label">Court Name:</span> ${caseData.courtName}</div>
-      <div class="field"><span class="label">Filing Date:</span> ${caseData.filingDate}</div>
+      <div class="cause-title">
+        <div class="party-row">
+          <div class="party-name">
+            ${caseData.clientName}<br>
+            <span style="font-size: 10pt; font-weight: normal; text-transform: none;">
+              R/o: ${caseData.address}
+            </span>
+          </div>
+          <div class="party-role">... PETITIONER / PLAINTIFF</div>
+        </div>
 
-      <!-- OPPOSING PARTY -->
-      <div class="section-title">Opposing Party</div>
-      <div class="field"><span class="label">Name:</span> ${caseData.opponentName}</div>
-      <div class="field"><span class="label">Address:</span> ${caseData.opponentAddress}</div>
+        <div class="versus">VERSUS</div>
 
-      <!-- DRAFT CONTENT -->
-      <div class="section-title">Draft Content</div>
-      <div class="draft-box">
+        <div class="party-row">
+          <div class="party-name">
+            ${caseData.opponentName}<br>
+            <span style="font-size: 10pt; font-weight: normal; text-transform: none;">
+              R/o: ${caseData.opponentAddress}
+            </span>
+          </div>
+          <div class="party-role">... RESPONDENT / DEFENDANT</div>
+        </div>
+      </div>
+
+      <div class="draft-subject">
+        IN THE MATTER OF: <br>
+        ${caseData.caseType || "LEGAL DRAFT"}
+      </div>
+
+      <div class="content-body">
+        <p><strong>MAY IT PLEASE THE HON'BLE COURT,</strong></p>
+        
         ${draft.content.replace(/\n/g, "<br/>")}
       </div>
 
-      <div class="signature">
-        Advocate’s Signature<br>
-        _______________________
+      <div class="signature-section">
+        <div class="place-date">
+          <strong>Place:</strong> Jammu/Srinagar<br>
+          <strong>Date:</strong> ${caseData.filingDate || new Date().toLocaleDateString()}
+        </div>
+
+        <div class="advocate-sign">
+          _______________________<br>
+          <strong>ADVOCATE FOR PETITIONER</strong><br>
+          (Through Counsel)
+        </div>
       </div>
 
-      <div class="footer">
-        Document auto-generated by LegalJK – ${new Date().toLocaleDateString()}
+      <div class="footer-note">
+        <em>Generated via LegalJK Case Management System</em>
       </div>
 
     </div>

@@ -17,3 +17,8 @@ input, select, textarea, button { font-size: 16px; }
 .blink-onoff {
 	animation: blink-onoff 1s steps(2, start) infinite;
 }
+
+/* PREMIUM TRANSITION: Ensures background color changes smoothly when Dark Mode is toggled */
+body {
+  transition: background-color 0.4s ease, color 0.4s ease;
+}

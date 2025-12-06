@@ -17,17 +17,19 @@ export default function ProfileCard({ user }) {
   );
 
   return (
-    <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-[#D4A017]/30">
+    <div className="w-full max-w-4xl mx-auto bg-white rounded-xl md:rounded-2xl shadow-xl overflow-hidden border border-[#D4A017]/30">
       
       {/* --- HEADER SECTION --- */}
-      <div className="relative bg-[#F8F8F8] p-8 flex flex-col items-center text-center border-b border-[#D4A017]/20">
+      {/* Reduced padding on mobile (p-6) vs desktop (p-8) */}
+      <div className="relative bg-[#F8F8F8] p-6 md:p-8 flex flex-col items-center text-center border-b border-[#D4A017]/20">
         
         {/* Decorative top accent */}
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#0B1C39] via-[#D4A017] to-[#0B1C39]"></div>
 
         {/* Circular Image with Double Border */}
         <div className="relative mb-4">
-          <div className="w-36 h-36 rounded-full p-1 bg-white border border-[#D4A017] shadow-lg">
+          {/* Smaller image on mobile (w-28) to save space, larger on desktop (w-36) */}
+          <div className="w-28 h-28 md:w-36 md:h-36 rounded-full p-1 bg-white border border-[#D4A017] shadow-lg transition-all duration-300">
             <img
               src={user.profileImage || "/default-avatar.png"}
               alt="Profile"
@@ -42,31 +44,33 @@ export default function ProfileCard({ user }) {
         </div>
 
         {/* Name & Titles */}
-        <h2 className="text-3xl font-bold text-[#0B1C39] mb-1">{user.name}</h2>
+        {/* Slightly smaller text on mobile */}
+        <h2 className="text-2xl md:text-3xl font-bold text-[#0B1C39] mb-1">{user.name}</h2>
         
         {user.title && (
-          <p className="text-[#D4A017] font-medium text-lg mb-1">{user.title}</p>
+          <p className="text-[#D4A017] font-medium text-base md:text-lg mb-1">{user.title}</p>
         )}
         
         {user.clientFacingName && (
-          <p className="text-gray-400 text-sm italic">
+          <p className="text-gray-400 text-xs md:text-sm italic">
             Known as: {user.clientFacingName}
           </p>
         )}
 
         {/* Short Bio */}
         {user.shortBio && (
-          <p className="text-gray-600 mt-4 max-w-xl leading-relaxed">
+          <p className="text-gray-600 mt-3 md:mt-4 text-sm md:text-base max-w-xl leading-relaxed">
             {user.shortBio}
           </p>
         )}
       </div>
 
       {/* --- MAIN CONTENT GRID --- */}
-      <div className="p-8 space-y-8">
+      {/* Tighter padding on mobile (p-5) to widen content area */}
+      <div className="p-5 md:p-8 space-y-6 md:space-y-8">
         
         {/* Two Column Layout for Contact & Professional Info */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           
           {/* CONTACT DETAILS */}
           <div className="space-y-3">
@@ -75,27 +79,27 @@ export default function ProfileCard({ user }) {
             <div className="space-y-3 text-sm text-[#0B1C39]">
               {user.phone && (
                 <div className="flex items-center gap-3">
-                  <span className="text-[#D4A017]"><Icons.Phone /></span>
-                  <span>{user.phone}</span>
+                  <span className="text-[#D4A017] shrink-0"><Icons.Phone /></span>
+                  <span className="break-all">{user.phone}</span>
                 </div>
               )}
               {user.officeAddress && (
                 <div className="flex items-start gap-3">
-                  <span className="text-[#D4A017] mt-0.5"><Icons.Map /></span>
+                  <span className="text-[#D4A017] mt-0.5 shrink-0"><Icons.Map /></span>
                   <span>{user.officeAddress}</span>
                 </div>
               )}
               {user.website && (
                 <div className="flex items-center gap-3">
-                  <span className="text-[#D4A017]"><Icons.Globe /></span>
-                  <a href={user.website} target="_blank" rel="noreferrer" className="hover:text-[#D4A017] transition-colors underline decoration-[#D4A017]/30">
+                  <span className="text-[#D4A017] shrink-0"><Icons.Globe /></span>
+                  <a href={user.website} target="_blank" rel="noreferrer" className="hover:text-[#D4A017] transition-colors underline decoration-[#D4A017]/30 break-all">
                     {user.website}
                   </a>
                 </div>
               )}
               {user.social?.linkedin && (
                 <div className="flex items-center gap-3">
-                  <span className="text-[#D4A017]"><Icons.Link /></span>
+                  <span className="text-[#D4A017] shrink-0"><Icons.Link /></span>
                   <a href={user.social.linkedin} target="_blank" rel="noreferrer" className="hover:text-[#D4A017] transition-colors">
                     LinkedIn Profile
                   </a>
@@ -103,7 +107,7 @@ export default function ProfileCard({ user }) {
               )}
                {user.social?.twitter && (
                 <div className="flex items-center gap-3">
-                  <span className="text-[#D4A017]"><Icons.Link /></span>
+                  <span className="text-[#D4A017] shrink-0"><Icons.Link /></span>
                   <a href={user.social.twitter} target="_blank" rel="noreferrer" className="hover:text-[#D4A017] transition-colors">
                     Twitter Profile
                   </a>
@@ -120,13 +124,13 @@ export default function ProfileCard({ user }) {
               {user.yearsOfExperience && (
                 <div className="flex justify-between border-b border-dashed border-gray-200 pb-1">
                   <span className="text-gray-500">Experience</span>
-                  <span className="font-semibold text-[#0B1C39]">{user.yearsOfExperience} Years</span>
+                  <span className="font-semibold text-[#0B1C39] text-right">{user.yearsOfExperience} Years</span>
                 </div>
               )}
               {user.consultationFee && (
                 <div className="flex justify-between border-b border-dashed border-gray-200 pb-1">
                   <span className="text-gray-500">Consultation</span>
-                  <span className="font-semibold text-[#0B1C39]">{user.consultationFee}</span>
+                  <span className="font-semibold text-[#0B1C39] text-right">{user.consultationFee}</span>
                 </div>
               )}
               
@@ -160,7 +164,7 @@ export default function ProfileCard({ user }) {
 
         {/* EDUCATION & ADMISSIONS GRID */}
         {(user.education?.length > 0 || user.admissions?.length > 0) && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4 border-t border-[#D4A017]/10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 pt-4 border-t border-[#D4A017]/10">
             
             {/* EDUCATION */}
             {user.education?.length > 0 && (
@@ -186,8 +190,8 @@ export default function ProfileCard({ user }) {
                   {user.admissions.map((a, i) => (
                     <li key={i} className="flex justify-between items-start text-sm">
                       <span className="text-[#0B1C39] font-medium">{a.jurisdiction}</span>
-                      <div className="text-right">
-                        <span className="block text-gray-500 text-xs">{a.barNumber || "N/A"}</span>
+                      <div className="text-right ml-2">
+                        <span className="block text-gray-500 text-xs whitespace-nowrap">{a.barNumber || "N/A"}</span>
                         <span className="block text-[#D4A017] text-xs">{a.admittedYear}</span>
                       </div>
                     </li>
@@ -200,16 +204,16 @@ export default function ProfileCard({ user }) {
 
         {/* AWARDS & PUBLICATIONS GRID */}
         {(user.awards?.length > 0 || user.publications?.length > 0) && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4 border-t border-[#D4A017]/10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 pt-4 border-t border-[#D4A017]/10">
             
             {/* AWARDS */}
             {user.awards?.length > 0 && (
-              <div className="bg-[#F8F8F8] p-5 rounded-xl border border-[#D4A017]/10">
+              <div className="bg-[#F8F8F8] p-4 md:p-5 rounded-xl border border-[#D4A017]/10">
                 <SectionHeader title="Honors & Awards" />
                 <ul className="space-y-2 mt-2">
                   {user.awards.map((award, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
-                      <span className="text-[#D4A017] mt-1">★</span>
+                      <span className="text-[#D4A017] mt-1 shrink-0">★</span>
                       <span>{award}</span>
                     </li>
                   ))}
@@ -219,7 +223,7 @@ export default function ProfileCard({ user }) {
 
             {/* PUBLICATIONS */}
             {user.publications?.length > 0 && (
-              <div className="bg-[#F8F8F8] p-5 rounded-xl border border-[#D4A017]/10">
+              <div className="bg-[#F8F8F8] p-4 md:p-5 rounded-xl border border-[#D4A017]/10">
                 <SectionHeader title="Publications" />
                 <ul className="space-y-2 mt-2">
                   {user.publications.map((p, i) => (

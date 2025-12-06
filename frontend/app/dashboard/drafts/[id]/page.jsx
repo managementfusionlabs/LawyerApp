@@ -104,9 +104,9 @@ export default function DraftViewPage() {
     return <div className="p-6 text-gray-600">Draft not found or unauthorized.</div>;
 
   return (
-    <div className="p-4 md:p-6 overflow-x-hidden">
+    <div className=" max-w-7xl mx-auto p-4 md:p-6 overflow-x-hidden">
       {/* Header */}
-      <div className="flex justify-between items-start mb-4">
+      <div className=" flex justify-between items-start mb-4">
         <div>
           <h1 className="text-xl font-bold font-serif text-[#0B1C39]">
             {draft.draftType || "Draft"}

@@ -36,21 +36,22 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-semibold font-serif text-[#0B1C39]">
+    <div className="p-4 md:p-6">
+      
+      <h1 className="text-2xl font-semibold font-serif text-[#0B1C39] mb-4">
         Your Profile
       </h1>
 
       <Button
         variant="primary"
         onClick={() => router.push("/dashboard/profile/edit")}
+        className="mb-6"
       >
         Edit Profile
       </Button>
 
-      <div className="border-l-4 border-[#D4A017] rounded-xl shadow bg-white p-6">
-        <ProfileCard user={user} />
-      </div>
+      {/* ⭐ FULL WIDTH CARD WITHOUT EXTRA WRAPPERS ⭐ */}
+      <ProfileCard user={user} />
     </div>
   );
 }
