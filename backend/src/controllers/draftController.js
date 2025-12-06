@@ -137,6 +137,45 @@ export const getDrafts = async (req, res) => {
 };
 
 
+//edit draft
+// PUT /drafts/:id
+export const updateDraft = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { content } = req.body;
+
+    if (!content || content.trim() === "") {
+      return res.status(400).json({ message: "Content cannot be empty" });
+    }
+
+    const draft = await Draft.findById(id);
+    if (!draft) {
+      return res.status(404).json({ message: "Draft not found" });
+    }
+
+    // If drafts belong to users, add this check:
+    // if (draft.userId.toString() !== req.user._id.toString()) {
+    //   return res.status(403).json({ message: "Unauthorized" });
+    // }
+
+    draft.content = content;
+    draft.updatedAt = new Date();
+
+    await draft.save();
+
+    return res.status(200).json({
+      message: "Draft updated successfully",
+      draft,
+    });
+
+  } catch (err) {
+    console.error("Update Draft Error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+
 /**
  * Delete Draft
  */

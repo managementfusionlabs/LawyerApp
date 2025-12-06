@@ -83,6 +83,33 @@ export const me = async (req, res) => {
   }
 };
 
+// -----------------------------------------------------Update user profile-------------------------------------
+export const updateProfile = async (req, res) => {
+  try {
+    const updates = { ...req.body };
+
+    // whitelist fields to avoid mass assignment
+    const allowed = [
+      "name","title","profileImage","phone","officeAddress","clientFacingName",
+      "practiceAreas","jurisdictions","admissions","education","yearsOfExperience",
+      "languages","awards","publications","memberships","consultationFee",
+      "availabilityNotes","website","social","shortBio","longBio"
+    ];
+
+    const payload = {};
+    allowed.forEach((k) => {
+      if (typeof updates[k] !== "undefined") payload[k] = updates[k];
+    });
+
+    const updated = await User.findByIdAndUpdate(req.user._id, payload, { new: true }).lean();
+
+    return res.json({ user: updated });
+  } catch (err) {
+    console.error("UPDATE PROFILE ERROR", err);
+    return res.status(500).json({ error: "Server error" });
+  }
+};
+
 // -----------------------------------------------------Logout user-------------------------------------
 export const logout = async (req, res) => {
   res.clearCookie(process.env.AUTH_COOKIE_NAME || "token", { path: "/" });

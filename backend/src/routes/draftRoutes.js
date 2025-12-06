@@ -5,7 +5,7 @@ import {
   getDrafts,
   getDraftById,
   getLatestDraft,
-  deleteDraft
+  deleteDraft,updateDraft
 } from "../controllers/draftController.js";
 import { createPdf } from "../controllers/pdfController.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
@@ -25,6 +25,9 @@ router.get("/case/:caseId/pdf", authMiddleware, createPdf);
 
 // Get latest draft for a case
 router.get("/case/:caseId", authMiddleware, getLatestDraft);
+
+//edit draft
+router.put("/:id", authMiddleware, updateDraft);
 
 // Export PDF
 router.get("/:id/pdf", authMiddleware, createPdf);

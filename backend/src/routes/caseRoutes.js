@@ -17,6 +17,10 @@ router.post("/", authMiddleware, createCase);
 // Get all cases
 router.get("/", authMiddleware, listCases);
 
+
+router.get("/my-cases", authMiddleware, listCases);
+
+
 router.get("/stats", authMiddleware, getCaseStats);
 
 // Get single case

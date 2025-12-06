@@ -144,7 +144,7 @@ export default function DraftListPage() {
 
             {filtered.map((d) => (
               <tr key={d._id} className="border-t hover:bg-gray-50">
-                <td className="p-3 font-medium text-[#0B1C39]">{d.draftType || "Draft"}</td>
+                <td className="p-3 font-medium text-[#0B1C39]">{ "GENERATED"}</td>
                 <td className="p-3">{d.caseId?.caseNumber.toUpperCase() || "—"}</td>
 
                 <td className="p-3 text-sm line-clamp-2">{d.content ? d.content.slice(0, 120) + (d.content.length>120?"...":"") : "—"}</td>
