@@ -64,11 +64,11 @@ export default function DraftListPage() {
   }
 
   return (
-    <div className="w-full max-w-7xl mx-auto p-4 md:p-8 space-y-8 min-h-screen">
-      
+  <div className="w-dvw  mx-auto pr-10 md:p-8 space-y-8 min-h-screen overflow-x-hidden">
+    
       {/* --- STICKY HEADER & CONTROLS --- */}
-      <div className="sticky top-0 z-30 bg-[#F9FAFB]/95 backdrop-blur-md py-4 border-b border-[#D4A017]/10 -mx-4 md:-mx-8 px-4 md:px-8 shadow-sm transition-all">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="sticky top-0 z-30 bg-[#F9FAFB]/95 backdrop-blur-md py-4 border-b border-[#D4A017]/10 px-4 md:px-8 shadow-sm">
+       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           
           {/* Title */}
           <div className="flex items-center gap-3">
@@ -133,10 +133,10 @@ export default function DraftListPage() {
           filtered.map((d) => (
             <div
               key={d._id}
-              className="group relative bg-white rounded-xl p-5 md:p-6 border border-[#D4A017]/20 shadow-sm transition-all duration-300 hover:shadow-xl hover:border-[#D4A017] hover:-translate-y-1 flex flex-col md:flex-row gap-6 md:items-center"
+              className="group relative w- bg-white rounded-xl p-5 md:p-6 border border-[#D4A017]/20 shadow-sm transition-all duration-300 hover:shadow-xl hover:border-[#D4A017] hover:-translate-y-1 flex flex-col md:flex-row gap-6 md:items-center"
             >
               {/* Icon & Type Info */}
-              <div className="flex items-start gap-4 md:w-1/4 shrink-0">
+              <div className="flex items-start gap-4 md:w-1/4 flex-shrink-0">
                 <div className="w-12 h-12 rounded-lg bg-[#FDF8E8] text-[#D4A017] border border-[#D4A017]/20 flex items-center justify-center shrink-0">
                   <Icons.FileText />
                 </div>
@@ -151,7 +151,7 @@ export default function DraftListPage() {
               </div>
 
               {/* Middle Content: Excerpt & Case */}
-              <div className="flex-1 space-y-3">
+              <div className="flex-1 space-y-3 ">
                  {/* Case Tag */}
                  <div className="flex items-center gap-2 text-xs font-medium text-[#0B1C39]/70">
                     <span className="text-[#D4A017]"><Icons.Briefcase /></span>

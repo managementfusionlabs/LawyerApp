@@ -116,7 +116,7 @@ export default function CreateCasePage() {
           onChange={handleChange}
           required
           options={[
-            { label: "Select Type", value: "" },
+            { label: "Select Case Type", value: "" },
             { label: "Civil", value: "civil" },
             { label: "Criminal", value: "criminal" },
             { label: "Family", value: "family" },
